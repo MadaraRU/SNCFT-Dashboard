@@ -1,6 +1,4 @@
 const asyncHandler = require("express-async-handler");
-const parcModel = require("../models/parcModel");
-
 const Parc = require("../models/parcModel");
 
 // @desc  Get Parc

@@ -21,6 +21,7 @@ const parcSchema = mongoose.Schema(
     reference: {
       type: String,
       required: true,
+      unique: true,
     },
     // Type: [typeSchema],
     type: {
