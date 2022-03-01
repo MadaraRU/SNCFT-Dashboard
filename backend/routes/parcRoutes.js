@@ -8,11 +8,8 @@ const {
 } = require("../controllers/parcController");
 const { admin, protect } = require("../middleware/authMiddleware");
 
-router.route("/").get(protect, admin, getParc).post(protect, admin, setParc);
-router
-  .route("/:id")
-  .put(protect, admin, updateParc)
-  .delete(protect, admin, deleteParc);
+router.route("/").get(protect, getParc).post(protect, setParc);
+router.route("/:id").put(protect, updateParc).delete(protect, deleteParc);
 
 // router.get("/", getParc);
 // router.post("/", setParc);

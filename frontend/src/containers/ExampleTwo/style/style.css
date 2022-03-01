@@ -1,0 +1,10 @@
+.admin-table thead {
+  color: white;
+  background-color: #1f2f61;
+  font-size: large;
+}
+
+.modal-input {
+  border-color: #1f2f61;
+  border-width: 1px;
+}
