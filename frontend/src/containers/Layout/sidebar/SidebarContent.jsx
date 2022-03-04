@@ -40,13 +40,32 @@ const SidebarContent = ({ onClick }) => {
       {user && user.isAdmin && (
         <ul className="sidebar__block">
           <SidebarLink
-            icon="user"
+            icon="users"
             title="Users"
             route="/pages/two"
             onClick={handleHideSidebar}
           />
         </ul>
       )}
+      {user && user.role == "responsable" && (
+        <ul className="sidebar__block">
+          <SidebarLink
+            icon="car"
+            title="Parc"
+            route="/pages/four"
+            onClick={handleHideSidebar}
+          />
+        </ul>
+      )}
+
+      <ul className="sidebar__block">
+        <SidebarLink
+          icon="user"
+          title="Profile"
+          route="/pages/three"
+          onClick={handleHideSidebar}
+        />
+      </ul>
     </div>
   );
 };

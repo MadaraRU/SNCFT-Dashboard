@@ -15,11 +15,11 @@ const LogInForm = () => {
   };
 
   const [formData, setFormData] = useState({
-    email: "",
+    userName: "",
     password: "",
   });
 
-  const { email, password } = formData;
+  const { userName, password } = formData;
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -51,7 +51,7 @@ const LogInForm = () => {
     e.preventDefault();
 
     const userData = {
-      email,
+      userName,
       password,
     };
 
@@ -61,16 +61,16 @@ const LogInForm = () => {
   return (
     <form className="form" onSubmit={onSubmit}>
       <div className="form__form-group">
-        <span className="form__form-group-label">E-mail</span>
+        <span className="form__form-group-label">Username</span>
         <div className="form__form-group-field">
           <div className="form__form-group-icon">
             <AccountOutlineIcon />
           </div>
           <input
-            name="email"
+            name="userName"
             type="text"
-            placeholder="email"
-            value={email}
+            placeholder="userName"
+            value={userName}
             onChange={onChange}
           />
         </div>

@@ -1,32 +1,11 @@
 const mongoose = require("mongoose");
 
-// const typeSchema = mongoose.Schema(
-//   {
-//     Reference: {
-//       type: String,
-//       required: true,
-//     },
-//     Name: {
-//       type: String,
-//       required: true,
-//     },
-//   },
-//   {
-//     timestamps: true,
-//   }
-// );
-
 const parcSchema = mongoose.Schema(
   {
     reference: {
       type: String,
       required: true,
       unique: true,
-    },
-    // Type: [typeSchema],
-    type: {
-      type: String,
-      required: true,
     },
     localisation: {
       type: String,
@@ -36,6 +15,15 @@ const parcSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
+    departement: {
+      type: String,
+    },
+    voiture: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Car",
+      },
+    ],
   },
 
   {

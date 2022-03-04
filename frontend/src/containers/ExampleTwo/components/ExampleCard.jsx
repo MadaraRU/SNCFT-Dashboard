@@ -7,7 +7,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
 import { toast } from "react-toastify";
 import EyeIcon from "mdi-react/EyeIcon";
 import KeyVariantIcon from "mdi-react/KeyVariantIcon";
-import EmailIcon from "mdi-react/EmailIcon";
+import FingerprintIcon from "mdi-react/FingerprintIcon";
 import AccountOutlineIcon from "mdi-react/AccountOutlineIcon";
 import CardAccountDetailsIcon from "mdi-react/CardAccountDetailsIcon";
 import DeleteIcon from "mdi-react/DeleteOutlineIcon";
@@ -27,6 +27,7 @@ const ExampleCard = () => {
   // Form Handler
   const [isPasswordShown, setIsPasswordShown] = useState(false);
   const [fetchedData, setFetchData] = useState();
+  const [deleted, setDeleted] = useState(false);
 
   const handleShowPassword = () => {
     setIsPasswordShown(!isPasswordShown);
@@ -34,12 +35,12 @@ const ExampleCard = () => {
 
   const [formData, setFormData] = useState({
     nom: "",
-    email: "",
+    userName: "",
     role: "",
     password: "",
   });
 
-  const { nom, email, role, password } = formData;
+  const { nom, userName, role, password } = formData;
 
   const {
     isError: errMessage,
@@ -65,7 +66,7 @@ const ExampleCard = () => {
   const addUser = async () => {
     const { data } = await axios.post("/api/users", {
       name: nom,
-      email,
+      userName,
       password,
       role,
     });
@@ -79,14 +80,14 @@ const ExampleCard = () => {
   const onSubmit = (e) => {
     e.preventDefault();
 
-    if (!password || !email || !nom || !role) {
+    if (!password || !userName || !nom || !role) {
       return;
     } else {
       addUser();
 
       setFormData({
         nom: "",
-        email: "",
+        userName: "",
         role: "",
         password: "",
       });
@@ -118,7 +119,7 @@ const ExampleCard = () => {
     return () => {
       dispatch(reset());
     };
-  }, [user, history, isError, message, dispatch, fetchedData]);
+  }, [user, history, isError, message, dispatch, fetchedData, deleted]);
 
   return (
     <Col md={12}>
@@ -136,24 +137,29 @@ const ExampleCard = () => {
                   </button>
                   <Modal size="m" isOpen={modal} toggle={toggle}>
                     <ModalHeader>Ajouter un utilistateur</ModalHeader>
-                    <ModalBody style={{ height: "50vh" }}>
-                      <div className="account__wrapper">
-                        <form className="form" onSubmit={onSubmit}>
+                    <form className="form" onSubmit={onSubmit}>
+                      <div
+                        className="account__wrapper"
+                        style={{
+                          width: "100%",
+                        }}
+                      >
+                        <ModalBody style={{ height: "50vh" }}>
                           <div className="form__form-group">
                             <span className="form__form-group-label">
-                              E-mail
+                              Username
                             </span>
                             <div className="form__form-group-field">
                               <div className="form__form-group-icon">
-                                <EmailIcon />
+                                <FingerprintIcon />
                               </div>
                               <input
                                 className="modal-input"
-                                name="email"
+                                name="userName"
                                 type="text"
-                                id="email"
-                                placeholder="email"
-                                value={email}
+                                id="userName"
+                                placeholder="userName"
+                                value={userName}
                                 onChange={onChange}
                               />
                             </div>
@@ -221,18 +227,18 @@ const ExampleCard = () => {
                               />
                             </div>
                           </div>
-                          <ModalFooter>
-                            <Button
-                              color="success"
-                              type="submit"
-                              onClick={toggle}
-                            >
-                              Ajouter
-                            </Button>
-                          </ModalFooter>
-                        </form>
+                        </ModalBody>
+                        <ModalFooter>
+                          <Button
+                            color="success"
+                            type="submit"
+                            onClick={toggle}
+                          >
+                            Ajouter
+                          </Button>
+                        </ModalFooter>
                       </div>
-                    </ModalBody>
+                    </form>
                   </Modal>
                 </div>
               </Col>
@@ -243,7 +249,7 @@ const ExampleCard = () => {
               <thead>
                 <tr>
                   <th>Nom</th>
-                  <th>Email</th>
+                  <th>Username</th>
                   <th>Role</th>
                   <th>{""}</th>
                 </tr>
@@ -253,7 +259,7 @@ const ExampleCard = () => {
                   <tbody key={user._id}>
                     <tr>
                       <td>{user.name}</td>
-                      <td>{user.email}</td>
+                      <td>{user.userName}</td>
                       <td>{user.role}</td>
                       <td>
                         <button
@@ -262,7 +268,10 @@ const ExampleCard = () => {
                           }}
                           className="btn-outline-danger btn-sm 
                           "
-                          onClick={() => dispatch(deleteUser(user._id))}
+                          onClick={() => {
+                            dispatch(deleteUser(user._id));
+                            setDeleted(!deleted);
+                          }}
                         >
                           <DeleteIcon />
                         </button>

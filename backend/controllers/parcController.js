@@ -1,8 +1,9 @@
 const asyncHandler = require("express-async-handler");
 const Parc = require("../models/parcModel");
+const Car = require("../models/carModel");
 
 // @desc  Get Parc
-// @route GET /api/goals
+// @route GET /api/parc
 // @access Private
 const getParc = asyncHandler(async (req, res) => {
   const parc = await Parc.find();
@@ -11,16 +12,12 @@ const getParc = asyncHandler(async (req, res) => {
 });
 
 // @desc  Set Parc
-// @route POST /api/goals
+// @route POST /api/parc
 // @access Private
 const setParc = asyncHandler(async (req, res) => {
   if (!req.body.reference) {
     res.status(400);
     throw new Error("Please add a reference field");
-  }
-  if (!req.body.type) {
-    res.status(400);
-    throw new Error("Please add a type field");
   }
   if (!req.body.localisation) {
     res.status(400);
@@ -30,19 +27,23 @@ const setParc = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("Please add a capacite field");
   }
+  if (!req.body.departement) {
+    res.status(400);
+    throw new Error("Please add a departement field");
+  }
 
   const parc = await Parc.create({
     reference: req.body.reference,
-    type: req.body.type,
     localisation: req.body.localisation,
     capacite: req.body.capacite,
+    departement: req.body.departement,
   });
 
   res.status(200).json(parc);
 });
 
 // @desc  Update Parc
-// @route UPDATE /api/goals/:id
+// @route UPDATE /api/parc/:id
 // @access Private
 const updateParc = asyncHandler(async (req, res) => {
   const parc = await Parc.findById(req.params.id);
@@ -60,7 +61,7 @@ const updateParc = asyncHandler(async (req, res) => {
 });
 
 // @desc  Delete Parc
-// @route DELETE /api/goals/:id
+// @route DELETE /api/parc/:id
 // @access Private
 const deleteParc = asyncHandler(async (req, res) => {
   const parc = await Parc.findById(req.params.id);
@@ -74,9 +75,38 @@ const deleteParc = asyncHandler(async (req, res) => {
   res.status(200).json({ id: req.params.id });
 });
 
+const getParcCars = asyncHandler(async (req, res) => {
+  const parc = await Parc.findById(req.params.id).populate("voiture");
+  res.status(200).json(parc.voiture);
+});
+
+const addParcCars = asyncHandler(async (req, res) => {
+  // Create a new car
+  const newCar = new Car(req.body);
+
+  // Get parc
+  const parc = await Parc.findById(req.params.id);
+
+  // Assing a parc as a cars parc
+  newCar.parc = parc;
+
+  // save the car
+  await newCar.save();
+
+  // Add car to the parc's voiture array
+  parc.voiture.push(newCar);
+
+  // save the parc
+  await parc.save();
+
+  res.status(201).json(newCar);
+});
+
 module.exports = {
   getParc,
   setParc,
   updateParc,
   deleteParc,
+  addParcCars,
+  getParcCars,
 };

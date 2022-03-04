@@ -15,6 +15,7 @@ const getUsers = async (token) => {
   return response.data;
 };
 
+// Delete user
 const deleteUser = async (userId, token) => {
   const config = {
     headers: {
@@ -27,9 +28,46 @@ const deleteUser = async (userId, token) => {
   return response.data;
 };
 
+// Get user profile
+
+const getUserProfile = async (token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.get(
+    "http://localhost:5000/api/users/profile",
+    config
+  );
+
+  return response.data;
+};
+
+// Update user Profile
+
+const updateUserProfile = async (user, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.put(
+    "http://localhost:5000/api/users/profile",
+    user,
+    config
+  );
+
+  return response.data;
+};
+
 const usersService = {
   getUsers,
   deleteUser,
+  getUserProfile,
+  updateUserProfile,
 };
 
 export default usersService;
