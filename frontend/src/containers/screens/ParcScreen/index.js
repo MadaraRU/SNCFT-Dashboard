@@ -1,10 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { Col, Container, Row } from "reactstrap";
 import CarburantDetails from "./components/CarburantDetails";
 import CarsDetails from "./components/CarsDetails";
 import ParcDetails from "./components/ParcDetails";
 
 const ExamplePage = (props) => {
+  const [cardId, setCardId] = useState("");
+
+  const showCarId = (id) => {
+    setCardId(id);
+  };
+
   return (
     <Container className="dashboard">
       <Row>
@@ -13,11 +19,11 @@ const ExamplePage = (props) => {
         </Col>
       </Row>
       <Row>
-        <ParcDetails />
+        <ParcDetails onShow={showCarId} />
       </Row>
       <Row>
         <Col md={6}>
-          <CarsDetails />
+          <CarsDetails cardId={cardId} />
         </Col>
         <Col md={6}>
           <CarburantDetails />

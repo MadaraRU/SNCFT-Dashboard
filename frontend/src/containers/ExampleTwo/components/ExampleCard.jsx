@@ -245,13 +245,13 @@ const ExampleCard = () => {
             </Row>
           </div>
           <div>
-            <Table className="admin-table" responsive>
+            <Table className="admin-table" responsive borderless hover>
               <thead>
                 <tr>
-                  <th>Nom</th>
-                  <th>Username</th>
-                  <th>Role</th>
-                  <th>{""}</th>
+                  <th scope="col">Nom</th>
+                  <th scope="col">Username</th>
+                  <th scope="col">Role</th>
+                  <th scope="col">{""}</th>
                 </tr>
               </thead>
               {users.map((user) => {

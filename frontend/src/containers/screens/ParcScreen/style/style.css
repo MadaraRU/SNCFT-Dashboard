@@ -12,3 +12,11 @@
   border-color: #1f2f61;
   border-width: 1px;
 }
+
+#update-button {
+  color: #17a2b8;
+}
+#update-button:hover {
+  color: white;
+  background: #17a2b8;
+}

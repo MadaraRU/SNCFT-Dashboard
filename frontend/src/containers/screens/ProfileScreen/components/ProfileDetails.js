@@ -18,7 +18,9 @@ const ProfileDetails = () => {
       history.push("/log_in");
     }
 
-    dispatch(reset());
+    return () => {
+      dispatch(reset());
+    };
   }, [dispatch, history, user]);
 
   return (
