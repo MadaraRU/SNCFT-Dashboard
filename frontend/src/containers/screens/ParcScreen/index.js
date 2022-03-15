@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { Col, Container, Row } from "reactstrap";
 import CarburantDetails from "./components/CarburantDetails";
 import CarsDetails from "./components/CarsDetails";
@@ -6,6 +8,13 @@ import ParcDetails from "./components/ParcDetails";
 
 const ExamplePage = (props) => {
   const [cardId, setCardId] = useState("");
+  const { user } = useSelector((state) => state.auth);
+
+  const history = useHistory();
+
+  if (user.role !== "responsable") {
+    history.replace("/dashboard/home");
+  }
 
   const showCarId = (id) => {
     setCardId(id);

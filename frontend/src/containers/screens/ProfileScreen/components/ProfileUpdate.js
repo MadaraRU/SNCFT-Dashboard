@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Card, CardBody, Col } from "reactstrap";
 import { Form, Button } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory, Redirect } from "react-router-dom";
 import {
   getUserProfile,
   reset,
@@ -23,30 +23,13 @@ const ProfileUpdate = () => {
   const { profile } = useSelector((state) => state.users);
   const { user } = useSelector((state) => state.auth);
 
-  // const updateUserProfile = async () => {
-  //   const config = {
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Accept: "application/json",
-  //       Authorization: `Bearer ${user.token}`,
-  //     },
-  //   };
-
-  //   const { data } = await axios.put(
-  //     "http://localhost:5000/api/users/profile",
-  //     {
-  //       name,
-  //       userName,
-  //       password,
-  //     },
-  //     config
-  //   );
-  //   setIsSubmitted(true);
-  // };
+  if (!user) {
+    history.replace("/");
+  }
 
   useEffect(() => {
     if (!user) {
-      history.replace("/log_in");
+      return <Redirect to="/" />;
     } else {
       setName(profile.name);
       setuserName(profile.userName);

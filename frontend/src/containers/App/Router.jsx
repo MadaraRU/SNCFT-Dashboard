@@ -9,20 +9,22 @@ import ExamplePageTwo from "../ExampleTwo/index";
 import ProfileScreen from "../screens/ProfileScreen/index";
 import ParcScreen from "../screens/ParcScreen/index";
 
-const Pages = () => (
-  <Switch>
-    <Route path="/pages/one" component={ExamplePageOne} />
-    <Route path="/pages/two" component={ExamplePageTwo} />
-    <Route path="/pages/three" component={ProfileScreen} />
-    <Route path="/pages/four" component={ParcScreen} />
-  </Switch>
-);
+const Pages = () => {
+  return (
+    <Switch>
+      <Route path="/dashboard/home" component={ExamplePageOne} />
+      <Route path="/dashboard/admin" component={ExamplePageTwo} />
+      <Route path="/dashboard/profile" component={ProfileScreen} />
+      <Route path="/dashboard/parc" component={ParcScreen} />
+    </Switch>
+  );
+};
 
 const wrappedRoutes = () => (
   <div>
     <Layout />
     <div className="container__wrap">
-      <Route path="/pages" component={Pages} />
+      <Route path="/dashboard" component={Pages} />
     </div>
   </div>
 );

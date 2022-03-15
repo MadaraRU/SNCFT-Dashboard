@@ -34,7 +34,7 @@ const LogInForm = () => {
     }
 
     if (isSuccess || user) {
-      history.push("/pages/one");
+      history.push("/dashboard/home");
     }
 
     dispatch(reset());

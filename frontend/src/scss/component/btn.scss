@@ -42,7 +42,10 @@
     fill: #444444;
   }
 
-  &:hover, &:focus, &:active, &:active:focus {
+  &:hover,
+  &:focus,
+  &:active,
+  &:active:focus {
     outline: none;
     box-shadow: none !important;
 
@@ -52,8 +55,9 @@
     }
   }
 
-  &:focus, &:active, &:active:focus {
-
+  &:focus,
+  &:active,
+  &:active:focus {
     &:before {
       transition: all 0s;
     }
@@ -71,7 +75,6 @@
     padding: 10px 15px;
 
     &:hover {
-
       p {
         color: #646777;
       }
@@ -82,7 +85,6 @@
     }
 
     &.icon--right {
-
       svg {
         margin: 2px 0 0 5px;
       }
@@ -108,12 +110,16 @@
       background-color: darken(#e7e2e2, 10%);
     }
 
-    &:hover, &:focus, &:active, &:active:focus {
+    &:hover,
+    &:focus,
+    &:active,
+    &:active:focus {
       border-color: darken(#e7e2e2, 10%);
       color: #646777;
     }
 
-    &:not([disabled]):not(.disabled):active, &:not([disabled]):not(.disabled).active {
+    &:not([disabled]):not(.disabled):active,
+    &:not([disabled]):not(.disabled).active {
       background-color: #dddddd;
       border-color: #dddddd;
     }
@@ -122,17 +128,16 @@
   &.btn-outline-secondary {
     border-color: #e7e2e2;
 
-    &, p {
-
+    &,
+    p {
       @include themify($themes) {
-        color: themed('colorText');
+        color: themed("colorText");
       }
     }
 
     svg {
-
       @include themify($themes) {
-        fill: themed('colorText');
+        fill: themed("colorText");
       }
     }
 
@@ -140,7 +145,10 @@
       background-color: #e7e2e2;
     }
 
-    &:hover, &:focus, &:active, &:active:focus {
+    &:hover,
+    &:focus,
+    &:active,
+    &:active:focus {
       background: transparent;
       border-color: #e7e2e2;
       color: #444444;
@@ -163,7 +171,10 @@
       background-color: $color-blue-hover;
     }
 
-    &:hover, &:focus, &:active, &:active:focus {
+    &:hover,
+    &:focus,
+    &:active,
+    &:active:focus {
       border-color: $color-blue-hover;
     }
   }
@@ -193,7 +204,10 @@
       background-color: $color-accent-hover;
     }
 
-    &:hover, &:focus, &:active, &:active:focus {
+    &:hover,
+    &:focus,
+    &:active,
+    &:active:focus {
       border-color: $color-accent-hover;
     }
   }
@@ -215,6 +229,22 @@
     }
   }
 
+  &.btn-info {
+    background-color: #0dcaf0;
+    border-color: #0dcaf0;
+    color: #ffffff;
+
+    &:before {
+      background-color: #0bafd0;
+    }
+
+    &:hover,
+    &:focus,
+    &:active,
+    &:active:focus {
+      border-color: #0bafd0;
+    }
+  }
   &.btn-warning {
     background-color: $color-yellow;
     border-color: $color-yellow;
@@ -224,7 +254,10 @@
       background-color: $color-yellow-hover;
     }
 
-    &:hover, &:focus, &:active, &:active:focus {
+    &:hover,
+    &:focus,
+    &:active,
+    &:active:focus {
       border-color: $color-yellow-hover;
     }
   }
@@ -254,7 +287,10 @@
       background-color: $color-red-hover;
     }
 
-    &:hover, &:focus, &:active, &:active:focus {
+    &:hover,
+    &:focus,
+    &:active,
+    &:active:focus {
       border-color: $color-red-hover;
     }
   }
@@ -276,10 +312,19 @@
     }
   }
 
-  &, &.btn-primary, &.btn-danger, &.btn-warning, &.btn-success, &.btn-outline-secondary, &.btn-secondary,
-  &.btn-outline-primary, &.btn-outline-danger, &.btn-outline-warning, &.btn-outline-success,
-  &.icon, &.icon.btn-secondary {
-
+  &,
+  &.btn-primary,
+  &.btn-danger,
+  &.btn-warning,
+  &.btn-success,
+  &.btn-outline-secondary,
+  &.btn-secondary,
+  &.btn-outline-primary,
+  &.btn-outline-danger,
+  &.btn-outline-warning,
+  &.btn-outline-success,
+  &.icon,
+  &.icon.btn-secondary {
     &.disabled {
       background-color: #f2f4f7;
       border-color: #f2f4f7;
@@ -293,11 +338,13 @@
       svg {
         fill: #dddddd;
       }
-
     }
   }
 
-  &.btn-primary, &.btn-danger, &.btn-warning, &.btn-success {
+  &.btn-primary,
+  &.btn-danger,
+  &.btn-warning,
+  &.btn-success {
     p {
       color: #ffffff;
     }
@@ -307,20 +354,31 @@
     }
   }
 
-  &.btn-outline-primary, &.btn-outline-danger, &.btn-outline-warning, &.btn-outline-success {
-
-    &:hover, &:focus, &:active, &:active:focus {
+  &.btn-outline-primary,
+  &.btn-outline-danger,
+  &.btn-outline-warning,
+  &.btn-outline-success {
+    &:hover,
+    &:focus,
+    &:active,
+    &:active:focus {
       color: #ffffff;
       background: transparent;
     }
   }
 
-  &.btn-primary, &.btn-danger, &.btn-warning, &.btn-success,
-  &.btn-outline-primary, &.btn-outline-danger, &.btn-outline-warning, &.btn-outline-success {
-
-    &:hover, &:focus,
-    &:active, &:active:focus {
-
+  &.btn-primary,
+  &.btn-danger,
+  &.btn-warning,
+  &.btn-success,
+  &.btn-outline-primary,
+  &.btn-outline-danger,
+  &.btn-outline-warning,
+  &.btn-outline-success {
+    &:hover,
+    &:focus,
+    &:active,
+    &:active:focus {
       p {
         color: #ffffff;
       }
@@ -329,18 +387,15 @@
         fill: #ffffff;
       }
     }
-
   }
 
   &.expand {
-
     svg {
       width: 0;
       transition: all 0.3s;
     }
 
     &.expand--load {
-
       @keyframes rotating {
         from {
           transform: rotate(0deg);
@@ -378,7 +433,6 @@
   }
 
   &.btn-toolbar--center {
-
     & > * {
       margin-right: auto;
       margin-left: auto;
@@ -407,7 +461,6 @@
   }
 
   &.btn-group--icons {
-
     .btn {
       padding: 7px 8px;
       line-height: 14px;
@@ -419,15 +472,17 @@
   }
 }
 
-button:focus, button:active {
+button:focus,
+button:active {
   outline: none;
 }
 
 .open > .dropdown-toggle.btn-default,
-.btn-default:active:focus, .btn-default:active:focus,
-.btn-default.focus, .btn-default:focus {
-
+.btn-default:active:focus,
+.btn-default:active:focus,
+.btn-default.focus,
+.btn-default:focus {
   @include themify($themes) {
-    background-color: themed('colorBackground');
+    background-color: themed("colorBackground");
   }
 }

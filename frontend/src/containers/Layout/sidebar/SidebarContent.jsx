@@ -21,19 +21,19 @@ const SidebarContent = ({ onClick }) => {
         {/* <SidebarCategory title="Dashboard" icon="store">
           <SidebarLink
             title="Page one"
-            route="/pages/one"
+            route="/dashboard/one"
             onClick={handleHideSidebar}
           />
           <SidebarLink
             title="Page two"
-            route="/pages/two"
+            route="/dashboard/two"
             onClick={handleHideSidebar}
           />
         </SidebarCategory> */}
         <SidebarLink
           icon="store"
           title="Dashboard"
-          route="/pages/one"
+          route="/dashboard/home"
           onClick={handleHideSidebar}
         />
       </ul>
@@ -42,7 +42,7 @@ const SidebarContent = ({ onClick }) => {
           <SidebarLink
             icon="users"
             title="Users"
-            route="/pages/two"
+            route="/dashboard/admin"
             onClick={handleHideSidebar}
           />
         </ul>
@@ -52,7 +52,7 @@ const SidebarContent = ({ onClick }) => {
           <SidebarLink
             icon="car"
             title="Parc"
-            route="/pages/four"
+            route="/dashboard/parc"
             onClick={handleHideSidebar}
           />
         </ul>
@@ -62,7 +62,7 @@ const SidebarContent = ({ onClick }) => {
         <SidebarLink
           icon="user"
           title="Profile"
-          route="/pages/three"
+          route="/dashboard/profile"
           onClick={handleHideSidebar}
         />
       </ul>

@@ -1,5 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
+import { Button as PButton } from "primereact/button";
+import { Toast } from "primereact/toast";
+import { InputText } from "primereact/inputtext";
+import { confirmDialog } from "primereact/confirmdialog";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { Card, CardBody, Col, Table, Row } from "reactstrap";
@@ -10,8 +16,11 @@ import KeyVariantIcon from "mdi-react/KeyVariantIcon";
 import FingerprintIcon from "mdi-react/FingerprintIcon";
 import AccountOutlineIcon from "mdi-react/AccountOutlineIcon";
 import CardAccountDetailsIcon from "mdi-react/CardAccountDetailsIcon";
-import DeleteIcon from "mdi-react/DeleteOutlineIcon";
 import "../style/style.css";
+
+import "primereact/resources/themes/bootstrap-sncft/theme5.css"; //theme
+import "primereact/resources/primereact.min.css"; //core css
+import "primeicons/primeicons.css"; //icons
 
 import { getUsers, reset, deleteUser } from "../../../store/users/usersSlice";
 import { reset as rst } from "../../../store/auth/register/registerSlice";
@@ -20,27 +29,29 @@ const ExampleCard = () => {
   const history = useHistory();
   const dispatch = useDispatch();
 
+  const { users, isError, message } = useSelector((state) => state.users);
+  const { user } = useSelector((state) => state.auth);
+
   // Modal Handler
   const [modal, setModal] = useState(false);
   const toggle = () => setModal(!modal);
 
+  // search Handler
+  const [globalFilter, setGlobalFilter] = useState(null);
+
   // Form Handler
   const [isPasswordShown, setIsPasswordShown] = useState(false);
-  const [fetchedData, setFetchData] = useState();
+  const [fetchedData, setFetchData] = useState(null);
   const [deleted, setDeleted] = useState(false);
+
+  const [nom, setNom] = useState("");
+  const [userName, setUserName] = useState("");
+  const [role, setRole] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleShowPassword = () => {
     setIsPasswordShown(!isPasswordShown);
   };
-
-  const [formData, setFormData] = useState({
-    nom: "",
-    userName: "",
-    role: "",
-    password: "",
-  });
-
-  const { nom, userName, role, password } = formData;
 
   const {
     isError: errMessage,
@@ -56,13 +67,7 @@ const ExampleCard = () => {
     dispatch(rst());
   }, [errMessage, succMessage, regMessage, dispatch]);
 
-  const onChange = (e) => {
-    setFormData((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
+  //  add user api
   const addUser = async () => {
     const { data } = await axios.post("/api/users", {
       name: nom,
@@ -70,13 +75,14 @@ const ExampleCard = () => {
       password,
       role,
     });
-    setFetchData(data);
+    if (data) {
+      setFetchData(data);
+    }
   };
 
-  useEffect(() => {
-    addUser();
-  }, []);
+  const addToast = useRef(null);
 
+  // Form submit
   const onSubmit = (e) => {
     e.preventDefault();
 
@@ -84,21 +90,79 @@ const ExampleCard = () => {
       return;
     } else {
       addUser();
+      toggle();
 
-      setFormData({
-        nom: "",
-        userName: "",
-        role: "",
-        password: "",
+      setFetchData(null);
+
+      setNom("");
+      setUserName("");
+      setRole("");
+      setPassword("");
+      addToast.current.show({
+        severity: "success",
+        summary: "Success",
+        detail: "Utilisateur ajouté",
+        life: 3000,
       });
     }
   };
 
+  // Delete UI Handler
+  const deleteToast = useRef(null);
+
+  const DeleteButton = (rowData) => {
+    const confirmDelete = () => {
+      confirmDialog({
+        message: "Voulez-vous supprimer cet utilisateur ?",
+        header: "Confirmation de suppression",
+        icon: "pi pi-info-circle",
+        acceptClassName: "btn btn-danger btn-delete-yes",
+        rejectClassName: "btn btn-outline-primary btn-delete-no",
+        acceptLabel: "oui",
+        rejectLabel: "non",
+        accept: () => {
+          dispatch(deleteUser(rowData._id));
+          setDeleted(!deleted);
+          deleteToast.current.show({
+            severity: "success",
+            summary: "Success",
+            detail: "Utilisateur supprimé",
+            life: 3000,
+          });
+        },
+      });
+    };
+    return (
+      <>
+        <PButton
+          icon="pi pi-trash"
+          className={
+            !rowData.isAdmin
+              ? `btn btn-danger btn-delete `
+              : `btn btn-danger btn-delete disabled`
+          }
+          onClick={confirmDelete}
+        />
+      </>
+    );
+  };
+
+  // table header (Search field)
+
+  const header = (
+    <div className="d-flex justify-content-between my-2">
+      <span className="p-input-icon-left">
+        <i className="pi pi-search" />
+        <InputText
+          type="search"
+          onInput={(e) => setGlobalFilter(e.target.value)}
+          placeholder="Chercher un utilisateur..."
+        />
+      </span>
+    </div>
+  );
+
   // Fetch users Handler
-
-  const { users, isError, message } = useSelector((state) => state.users);
-
-  const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (isError) {
@@ -106,7 +170,7 @@ const ExampleCard = () => {
     }
 
     if (!user) {
-      history.replace("/login");
+      history.replace("/log_in");
     }
     if (user && user.isAdmin) {
       dispatch(getUsers());
@@ -132,9 +196,12 @@ const ExampleCard = () => {
               </Col>
               <Col md={3}>
                 <div style={{ textAlign: "center" }}>
-                  <button className="btn btn-primary my-2" onClick={toggle}>
-                    Ajouter un utilistateur
-                  </button>
+                  <PButton
+                    className="btn btn-primary my-3 "
+                    label="Ajouter un utilistateur"
+                    icon="pi pi-plus"
+                    onClick={toggle}
+                  />
                   <Modal size="m" isOpen={modal} toggle={toggle}>
                     <ModalHeader>Ajouter un utilistateur</ModalHeader>
                     <form className="form" onSubmit={onSubmit}>
@@ -160,7 +227,7 @@ const ExampleCard = () => {
                                 id="userName"
                                 placeholder="userName"
                                 value={userName}
-                                onChange={onChange}
+                                onChange={(e) => setUserName(e.target.value)}
                               />
                             </div>
                           </div>
@@ -177,7 +244,7 @@ const ExampleCard = () => {
                                 id="nom"
                                 placeholder="nom"
                                 value={nom}
-                                onChange={onChange}
+                                onChange={(e) => setNom(e.target.value)}
                               />
                             </div>
                           </div>
@@ -197,7 +264,7 @@ const ExampleCard = () => {
                                 id="password"
                                 placeholder="Password"
                                 value={password}
-                                onChange={onChange}
+                                onChange={(e) => setPassword(e.target.value)}
                               />
                               <button
                                 className={`form__form-group-button${
@@ -216,24 +283,28 @@ const ExampleCard = () => {
                               <div className="form__form-group-icon">
                                 <CardAccountDetailsIcon color="#1f2f61" />
                               </div>
-                              <input
+                              <select
                                 className="modal-input"
-                                name="role"
-                                type="text"
-                                id="role"
-                                placeholder="role"
-                                value={role}
-                                onChange={onChange}
-                              />
+                                style={{
+                                  width: "100%",
+                                }}
+                                onChange={(e) => {
+                                  const selectedRole = e.target.value;
+                                  setRole(selectedRole);
+                                }}
+                                defaultValue={role}
+                              >
+                                <option value={role} disabled hidden>
+                                  Choisir un rôle
+                                </option>
+                                <option value="responsable">responsable</option>
+                                <option value="user">user</option>
+                              </select>
                             </div>
                           </div>
                         </ModalBody>
                         <ModalFooter>
-                          <Button
-                            color="success"
-                            type="submit"
-                            onClick={toggle}
-                          >
+                          <Button color="success" type="submit">
                             Ajouter
                           </Button>
                         </ModalFooter>
@@ -245,13 +316,20 @@ const ExampleCard = () => {
             </Row>
           </div>
           <div>
-            <Table className="admin-table" responsive borderless hover>
+            {/* <Table
+              className="admin-table"
+              responsive
+              borderless
+              hover
+              cellPadding={0}
+              cellSpacing={0}
+            >
               <thead>
                 <tr>
                   <th scope="col">Nom</th>
                   <th scope="col">Username</th>
                   <th scope="col">Role</th>
-                  <th scope="col">{""}</th>
+                  <th scope="col">Action</th>
                 </tr>
               </thead>
               {users.map((user) => {
@@ -280,7 +358,28 @@ const ExampleCard = () => {
                   </tbody>
                 );
               })}
-            </Table>
+            </Table> */}
+            <Toast ref={deleteToast} />
+            <Toast ref={addToast} />
+            {header}
+            <DataTable
+              value={users}
+              responsiveLayout="scroll"
+              size="large"
+              className="admin-table"
+              removableSort
+              tableClassName="table"
+              dataKey="_id"
+              paginator
+              rows={4}
+              paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+              globalFilter={globalFilter}
+            >
+              <Column field="name" header="Nom" sortable></Column>
+              <Column field="userName" header="Username" sortable></Column>
+              <Column field="role" header="Role" sortable></Column>
+              <Column header="Action" body={DeleteButton}></Column>
+            </DataTable>
           </div>
         </CardBody>
       </Card>

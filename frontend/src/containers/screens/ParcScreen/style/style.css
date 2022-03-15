@@ -8,15 +8,27 @@
   border-color: #c8d0dd;
 }
 
+.admin-table td {
+  vertical-align: middle;
+  font-size: 14px;
+}
+
 .modal-input {
   border-color: #1f2f61;
   border-width: 1px;
 }
 
-#update-button {
-  color: #17a2b8;
+.btn-show-car {
+  cursor: pointer;
+  font-size: large;
 }
-#update-button:hover {
+
+button.p-button.p-component.btn.btn-info.p-button-rounded.p-button-icon-only {
   color: white;
-  background: #17a2b8;
+  background-color: #0dcaf0 !important;
+  border-color: #0dcaf0 !important;
+}
+
+.hidden {
+  display: none;
 }

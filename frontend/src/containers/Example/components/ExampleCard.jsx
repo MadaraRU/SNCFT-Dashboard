@@ -1,5 +1,5 @@
-import React from 'react';
-import { Card, CardBody, Col } from 'reactstrap';
+import React from "react";
+import { Card, CardBody, Col } from "reactstrap";
 
 const ExampleCard = () => (
   <Col md={12}>

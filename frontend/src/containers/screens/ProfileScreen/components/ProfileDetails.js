@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Card, CardBody, Col, Container, Row } from "reactstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { getUserProfile, reset } from "../../../../store/users/usersSlice";
-import { useHistory } from "react-router-dom";
+import { useHistory, Redirect } from "react-router-dom";
 
 const ProfileDetails = () => {
   const { profile } = useSelector((state) => state.users);
@@ -11,11 +11,16 @@ const ProfileDetails = () => {
   const dispatch = useDispatch();
   const history = useHistory;
 
+  // if (!user) {
+  //   history.replace("/");
+  // }
+
   useEffect(() => {
     if (user) {
       dispatch(getUserProfile());
     } else {
-      history.push("/log_in");
+      // history.replace("/");
+      return <Redirect to="/" />;
     }
 
     return () => {

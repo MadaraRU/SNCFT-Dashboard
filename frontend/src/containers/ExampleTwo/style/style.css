@@ -3,12 +3,33 @@
   background-color: #1f2f61;
   font-size: large;
 }
+
 .admin-table tbody {
   border-bottom: 0.5px solid;
   border-color: #c8d0dd;
 }
 
+.admin-table td {
+  vertical-align: middle;
+  font-size: 14px;
+}
+
 .modal-input {
   border-color: #1f2f61;
   border-width: 1px;
+}
+
+button.p-button.p-component.btn.btn-danger.p-button-icon-only {
+  background-color: #ff4861 !important;
+  border-color: #ff4861 !important;
+}
+
+button.btn-delete-yes {
+  background-color: #ff4861 !important;
+  border-color: #ff4861 !important;
+}
+
+button.btn-delete-no {
+  background-color: white !important;
+  border-color: white !important;
 }

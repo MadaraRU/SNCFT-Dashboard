@@ -11,6 +11,20 @@ const getParc = asyncHandler(async (req, res) => {
   res.status(200).json(parc);
 });
 
+// @desc  Get Parc by id
+// @route GET /api/parc/:id
+// @access Private
+const getParcById = asyncHandler(async (req, res) => {
+  const parc = await Parc.findById(req.params.id);
+
+  if (!parc) {
+    res.status(404);
+    throw new Error("Parc not found");
+  }
+
+  res.status(200).json(parc);
+});
+
 // @desc  Set Parc
 // @route POST /api/parc
 // @access Private
@@ -104,6 +118,7 @@ const addParcCars = asyncHandler(async (req, res) => {
 
 module.exports = {
   getParc,
+  getParcById,
   setParc,
   updateParc,
   deleteParc,
