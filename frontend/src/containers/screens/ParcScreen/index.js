@@ -12,7 +12,7 @@ const ExamplePage = (props) => {
 
   const history = useHistory();
 
-  if (user.role !== "responsable") {
+  if (user.role !== "admin") {
     history.replace("/dashboard/home");
   }
 

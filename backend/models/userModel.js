@@ -25,6 +25,16 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    departement: {
+      type: String,
+      required: false,
+    },
+    mission: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Mission",
+      },
+    ],
   },
   {
     timestamps: true,

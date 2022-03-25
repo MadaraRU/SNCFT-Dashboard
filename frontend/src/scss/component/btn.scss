@@ -197,35 +197,36 @@
   }
 
   &.btn-success {
-    background-color: $color-accent;
-    border-color: $color-accent;
+    background-color: $color-green !important;
+    border-color: $color-green !important;
 
     &:before {
-      background-color: $color-accent-hover;
+      background-color: $color-green-hover;
     }
 
     &:hover,
     &:focus,
     &:active,
     &:active:focus {
-      border-color: $color-accent-hover;
+      border-color: $color-green-hover;
     }
   }
 
   &.btn-outline-success {
-    color: $color-accent;
-    border-color: $color-accent;
+    color: #ffffff;
+    background-color: $color-green;
+    border-color: $color-green;
 
     p {
-      color: $color-accent;
+      color: $color-green;
     }
 
     svg {
-      fill: $color-accent;
+      fill: $color-green;
     }
 
     &:before {
-      background-color: $color-accent;
+      background-color: $color-green;
     }
   }
 

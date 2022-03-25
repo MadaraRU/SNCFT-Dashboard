@@ -8,10 +8,18 @@
   border-color: #c8d0dd;
 }
 
-.admin-table td {
+.p-datatable .p-datatable-tbody > tr > td {
+  padding: 0;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  padding-left: 5px;
+  font-size: medium;
+}
+
+/* .admin-table td {
   vertical-align: middle;
   font-size: 14px;
-}
+} */
 
 .modal-input {
   border-color: #1f2f61;
@@ -37,4 +45,20 @@ button.p-button.p-component.btn.btn-info.p-button-rounded.p-button-icon-only {
 
 .hidden {
   display: none;
+}
+
+.status-fini {
+  background: #c8e6c9;
+  color: #256029;
+  font-weight: 600;
+  font-size: 20px;
+  padding: 2px;
+}
+
+.status-en_cours {
+  background: #feedaf;
+  color: #8a5340;
+  font-weight: 600;
+  font-size: 20px;
+  padding: 2px;
 }

@@ -16,7 +16,6 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-  Table,
 } from "reactstrap";
 import ReferenceIcon from "mdi-react/SmartCardOutlineIcon";
 import DepartementIcon from "mdi-react/DomainIcon";
@@ -53,11 +52,15 @@ const ParcDetails = (props) => {
     reference: "",
     departement: "",
     localisation: "",
-    capacite: 0,
   });
+
+  const [refIsValid, setRefIsValid] = useState(true);
+  const [departIsValid, setDepartIsValid] = useState(true);
+  const [localIsValid, setLocalIsValid] = useState(true);
+
   const [isDeleted, setIsDeleted] = useState(false);
 
-  const { reference, departement, localisation, capacite } = formData;
+  const { reference, departement, localisation } = formData;
 
   const onChange = (e) => {
     setFormData((prevState) => ({
@@ -72,11 +75,19 @@ const ParcDetails = (props) => {
   const submitHandler = (e) => {
     e.preventDefault(e);
 
-    if (!departement || !reference || !localisation || !capacite) {
+    if (!departement || !reference || !localisation) {
+      setRefIsValid(false);
+      setDepartIsValid(false);
+      setLocalIsValid(false);
       return;
+    } else {
+      toggle();
+      setRefIsValid(true);
+      setDepartIsValid(true);
+      setLocalIsValid(true);
     }
 
-    dispatch(setParc({ reference, localisation, capacite, departement }));
+    dispatch(setParc({ reference, localisation, departement }));
     addToast.current.show({
       severity: "success",
       summary: "Success",
@@ -87,7 +98,6 @@ const ParcDetails = (props) => {
       reference: "",
       departement: "",
       localisation: "",
-      capacite: 0,
     });
   };
 
@@ -96,13 +106,12 @@ const ParcDetails = (props) => {
     referenceU: undefined,
     departementU: undefined,
     localisationU: undefined,
-    capaciteU: undefined,
   });
   const [parcIdU, setParcIdU] = useState("");
   const [isUpdated, setIsUpdated] = useState(false);
   const [updated, setUpdated] = useState(false);
 
-  const { referenceU, departementU, localisationU, capaciteU } = formDataU;
+  const { referenceU, departementU, localisationU } = formDataU;
 
   const onChangeU = (e) => {
     setFormDataU((prevState) => ({
@@ -140,14 +149,12 @@ const ParcDetails = (props) => {
       reference: referenceU,
       departement: departementU,
       localisation: localisationU,
-      capacite: capaciteU,
     });
 
     setFormDataU({
       referenceU: undefined,
       departementU: undefined,
       localisationU: undefined,
-      capaciteU: undefined,
     });
 
     if (isUpdated) {
@@ -166,7 +173,7 @@ const ParcDetails = (props) => {
           props.onShow(rowData._id);
         }}
       >
-        Voire voiture
+        Voir voitures
       </a>
     );
   };
@@ -293,15 +300,27 @@ const ParcDetails = (props) => {
                             <ReferenceIcon />
                           </div>
                           <input
-                            className="modal-input"
+                            className={
+                              refIsValid ? `modal-input` : `modal-input-error`
+                            }
                             name="reference"
                             type="text"
                             id="reference"
                             placeholder="Reference"
                             value={reference}
                             onChange={onChange}
+                            onBlur={() => {
+                              setRefIsValid(true);
+                            }}
                           />
                         </div>
+                        {!refIsValid && (
+                          <div>
+                            <p style={{ color: "red", marginLeft: "30px" }}>
+                              Ce champ ne doit pas rester vide
+                            </p>
+                          </div>
+                        )}
                       </div>
                       <div className="form__form-group">
                         <span className="form__form-group-label">
@@ -312,15 +331,29 @@ const ParcDetails = (props) => {
                             <DepartementIcon />
                           </div>
                           <input
-                            className="modal-input"
+                            className={
+                              departIsValid
+                                ? `modal-input`
+                                : `modal-input-error`
+                            }
                             name="departement"
                             type="text"
                             id="departement"
                             placeholder="Departement"
                             value={departement}
                             onChange={onChange}
+                            onBlur={() => {
+                              setDepartIsValid(true);
+                            }}
                           />
                         </div>
+                        {!departIsValid && (
+                          <div>
+                            <p style={{ color: "red", marginLeft: "30px" }}>
+                              Ce champ ne doit pas rester vide
+                            </p>
+                          </div>
+                        )}
                       </div>
 
                       <div className="form__form-group">
@@ -333,35 +366,30 @@ const ParcDetails = (props) => {
                           </div>
                           <input
                             name="localisation"
-                            className="modal-input"
+                            className={
+                              localIsValid ? `modal-input` : `modal-input-error`
+                            }
                             id="localisation"
                             placeholder="Localisation"
                             value={localisation}
                             onChange={onChange}
+                            onBlur={() => {
+                              setLocalIsValid(true);
+                            }}
                           />
                         </div>
-                      </div>
-                      <div className="form__form-group">
-                        <span className="form__form-group-label">Capacite</span>
-                        <div className="form__form-group-field">
-                          <div className="form__form-group-icon">
-                            <CapaciteIcon />
+
+                        {!localIsValid && (
+                          <div>
+                            <p style={{ color: "red", marginLeft: "30px" }}>
+                              Ce champ ne doit pas rester vide
+                            </p>
                           </div>
-                          <input
-                            className="modal-input"
-                            name="capacite"
-                            type="number"
-                            id="capacite"
-                            placeholder="Capacite"
-                            value={capacite}
-                            onChange={onChange}
-                            min="1"
-                          />
-                        </div>
+                        )}
                       </div>
                     </ModalBody>
                     <ModalFooter>
-                      <Button color="success" type="submit" onClick={toggle}>
+                      <Button color="success" type="submit">
                         Ajouter
                       </Button>
                     </ModalFooter>
@@ -448,31 +476,8 @@ const ParcDetails = (props) => {
                         />
                       </div>
                     </div>
-                    <div className="form__form-group">
-                      <span className="form__form-group-label">Capacite</span>
-                      <div className="form__form-group-field">
-                        <div className="form__form-group-icon">
-                          <CapaciteIcon />
-                        </div>
-                        <input
-                          className="modal-input"
-                          name="capaciteU"
-                          type="number"
-                          id="capaciteU"
-                          placeholder={parcData.capacite}
-                          value={
-                            capaciteU === undefined
-                              ? parcData.capacite
-                              : capaciteU
-                          }
-                          onChange={onChangeU}
-                          step="1"
-                        />
-                      </div>
-                    </div>
                   </ModalBody>
                   <ModalFooter>
-                    <div>{parcData._id}</div>
                     <Button
                       color="success"
                       type="submit"
@@ -509,6 +514,7 @@ const ParcDetails = (props) => {
               rows={4}
               paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
               globalFilter={globalFilter}
+              emptyMessage="Aucun parc trouvé"
             >
               <Column field="reference" header="Reference" sortable></Column>
               <Column
@@ -521,7 +527,6 @@ const ParcDetails = (props) => {
                 header="Localisation"
                 sortable
               ></Column>
-              <Column field="capacite" header="Capactie" sortable></Column>
               <Column header="Voiture" body={ShowCar}></Column>
               <Column header="Action" body={carActions}></Column>
             </DataTable>

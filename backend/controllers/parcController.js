@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const Parc = require("../models/parcModel");
 const Car = require("../models/carModel");
+const Mission = require("../models/missionModel");
 
 // @desc  Get Parc
 // @route GET /api/parc
@@ -37,10 +38,6 @@ const setParc = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("Please add a localisation field");
   }
-  if (!req.body.capacite) {
-    res.status(400);
-    throw new Error("Please add a capacite field");
-  }
   if (!req.body.departement) {
     res.status(400);
     throw new Error("Please add a departement field");
@@ -49,7 +46,6 @@ const setParc = asyncHandler(async (req, res) => {
   const parc = await Parc.create({
     reference: req.body.reference,
     localisation: req.body.localisation,
-    capacite: req.body.capacite,
     departement: req.body.departement,
   });
 
@@ -116,6 +112,74 @@ const addParcCars = asyncHandler(async (req, res) => {
   res.status(201).json(newCar);
 });
 
+const getMission = asyncHandler(async (req, res) => {
+  const parc = await Parc.findById(req.params.id).populate("mission");
+  res.status(200).json(parc.mission);
+});
+
+// @desc    add mission
+// @route   POST /api/parcs/:id/mission
+// @access  Private
+
+const addMission = asyncHandler(async (req, res) => {
+  if (!req.body.nom) {
+    res.status(400);
+    throw new Error("Please add a nom field");
+  }
+  if (!req.body.nomAgent) {
+    res.status(400);
+    throw new Error("Please add a nomAgent field");
+  }
+  if (!req.body.matricule) {
+    res.status(400);
+    throw new Error("Please add a matricule field");
+  }
+  if (!req.body.dateDeMission) {
+    res.status(400);
+    throw new Error("Please add a dateDeMission field");
+  }
+  if (!req.body.destination) {
+    res.status(400);
+    throw new Error("Please add a destination field");
+  }
+  // Create a new car
+  const newMission = new Mission(req.body);
+
+  // Get parc
+  const parc = await Parc.findById(req.params.id);
+
+  // Assing a parc as a mission parc
+  newMission.parc = parc;
+
+  // save the car
+  await newMission.save();
+
+  // Add mission to the parc's mission array
+  parc.mission.push(newMission);
+
+  // save the parc
+  await parc.save();
+
+  res.status(201).json(newMission);
+});
+
+// @desc  update Mission to fini
+// @route PUT /api/parc/:id/mission/fini
+// @access Private
+
+const updateMissionToFini = asyncHandler(async (req, res) => {
+  const mission = await Mission.findById(req.params.id).populate("parc");
+
+  if (mission) {
+    mission.missionStatus = "fini";
+    const updatedMission = await mission.save();
+    res.json(updatedMission);
+  } else {
+    res.status(404);
+    throw new Error("Mission not found");
+  }
+});
+
 module.exports = {
   getParc,
   getParcById,
@@ -124,4 +188,7 @@ module.exports = {
   deleteParc,
   addParcCars,
   getParcCars,
+  getMission,
+  addMission,
+  updateMissionToFini,
 };

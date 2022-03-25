@@ -41,6 +41,7 @@ const ProfileDetails = () => {
                 style={{
                   backgroundColor: "#1F2F61",
                   color: "white",
+                  width: "100%",
                 }}
               >
                 Nom:{" "}
@@ -52,6 +53,7 @@ const ProfileDetails = () => {
                 style={{
                   backgroundColor: "#1F2F61",
                   color: "white",
+                  width: "100%",
                 }}
               >
                 Username:{" "}
@@ -63,11 +65,24 @@ const ProfileDetails = () => {
                 style={{
                   backgroundColor: "#1F2F61",
                   color: "white",
+                  width: "100%",
                 }}
               >
                 Role:{" "}
               </Col>
               <Col>{profile.role}</Col>
+            </Row>
+            <Row className="my-1">
+              <Col
+                style={{
+                  backgroundColor: "#1F2F61",
+                  color: "white",
+                  width: "100%",
+                }}
+              >
+                Departement:{" "}
+              </Col>
+              <Col>{profile.departement}</Col>
             </Row>
           </Container>
         </CardBody>

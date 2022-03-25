@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DownIcon from "mdi-react/ChevronDownIcon";
 import { Collapse } from "reactstrap";
 import TopbarMenuLink from "./TopbarMenuLink";
@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { logout, reset } from "../../../store/auth/authSlice";
 import { Redirect } from "react-router-dom";
+import { getUserProfile } from "../../../store/users/usersSlice";
 
 const Ava = `${process.env.PUBLIC_URL}/img/ava.png`;
 
@@ -15,6 +16,7 @@ const TopbarProfile = () => {
   const dispatch = useDispatch();
 
   const { user } = useSelector((state) => state.auth);
+  const { profile } = useSelector((state) => state.users);
 
   const handleToggleCollapse = () => {
     setIsCollapsed(!isCollapsed);
@@ -26,9 +28,11 @@ const TopbarProfile = () => {
     history.replace("/");
   };
 
-  // if (typeof (user.name === "null")) {
-  //   history.replace("/");
-  // }
+  useEffect(() => {
+    if (user) {
+      dispatch(getUserProfile());
+    }
+  }, [user]);
 
   return (
     <div className="topbar__profile">
@@ -38,7 +42,7 @@ const TopbarProfile = () => {
         onClick={handleToggleCollapse}
       >
         <img className="topbar__avatar-img" src={Ava} alt="avatar" />
-        <p className="topbar__avatar-name">{user?.name ? user.name : "user"}</p>
+        <p className="topbar__avatar-name">{profile.name}</p>
         <DownIcon className="topbar__icon" />
       </button>
       {isCollapsed && (

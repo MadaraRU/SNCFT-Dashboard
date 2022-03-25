@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import EyeIcon from "mdi-react/EyeIcon";
 import KeyVariantIcon from "mdi-react/KeyVariantIcon";
 import AccountOutlineIcon from "mdi-react/AccountOutlineIcon";
 import { Link, useHistory } from "react-router-dom";
 import { login, reset } from "../../../store/auth/authSlice";
 import { useSelector, useDispatch } from "react-redux";
-import { toast } from "react-toastify";
+import { Toast } from "primereact/toast";
 
 const LogInForm = () => {
   const [isPasswordShown, setIsPasswordShown] = useState(false);
@@ -28,9 +28,17 @@ const LogInForm = () => {
     (state) => state.auth
   );
 
+  const ErrorToast = useRef(null);
+  const blankFieldToast = useRef(null);
+
   useEffect(() => {
     if (isError) {
-      toast.error(message);
+      ErrorToast.current.show({
+        severity: "error",
+        summary: "Error Message",
+        detail: "les informations d'identification invalides",
+        life: 3000,
+      });
     }
 
     if (isSuccess || user) {
@@ -49,6 +57,14 @@ const LogInForm = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
+    if (!password || !userName) {
+      blankFieldToast.current.show({
+        severity: "warn",
+        summary: "Warn Message",
+        detail: "Veuillez remplir les champs",
+      });
+      return;
+    }
 
     const userData = {
       userName,
@@ -108,6 +124,8 @@ const LogInForm = () => {
       >
         Sign In
       </button>
+      <Toast ref={ErrorToast} />
+      <Toast ref={blankFieldToast} />
     </form>
   );
 };

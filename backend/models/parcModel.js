@@ -11,10 +11,6 @@ const parcSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    capacite: {
-      type: Number,
-      required: true,
-    },
     departement: {
       type: String,
     },
@@ -22,6 +18,12 @@ const parcSchema = mongoose.Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Car",
+      },
+    ],
+    mission: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Mission",
       },
     ],
   },

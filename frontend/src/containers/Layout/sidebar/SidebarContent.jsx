@@ -31,13 +31,13 @@ const SidebarContent = ({ onClick }) => {
           />
         </SidebarCategory> */}
         <SidebarLink
-          icon="store"
+          icon="chart-bars"
           title="Dashboard"
           route="/dashboard/home"
           onClick={handleHideSidebar}
         />
       </ul>
-      {user && user.isAdmin && (
+      {user && user.role === "admin" && (
         <ul className="sidebar__block">
           <SidebarLink
             icon="users"
@@ -47,15 +47,43 @@ const SidebarContent = ({ onClick }) => {
           />
         </ul>
       )}
-      {user && user.role == "responsable" && (
+      {user && user.role === "admin" && (
         <ul className="sidebar__block">
           <SidebarLink
-            icon="car"
+            icon="apartment"
             title="Parc"
             route="/dashboard/parc"
             onClick={handleHideSidebar}
           />
         </ul>
+      )}
+      {user && user.role === "responsable" && (
+        <>
+          <ul className="sidebar__block">
+            <SidebarLink
+              icon="location"
+              title="Mission"
+              route="/dashboard/mission"
+              onClick={handleHideSidebar}
+            />
+          </ul>
+          <ul className="sidebar__block">
+            <SidebarLink
+              icon="car"
+              title="Voiture"
+              route="/dashboard/voiture"
+              onClick={handleHideSidebar}
+            />
+          </ul>
+          <ul className="sidebar__block">
+            <SidebarLink
+              icon="layers"
+              title="Fiche Technique"
+              route="/dashboard/ficheTechnique"
+              onClick={handleHideSidebar}
+            />
+          </ul>
+        </>
       )}
 
       <ul className="sidebar__block">

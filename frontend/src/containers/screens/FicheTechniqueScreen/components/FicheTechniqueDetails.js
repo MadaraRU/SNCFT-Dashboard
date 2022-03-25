@@ -2,7 +2,7 @@ import React from "react";
 
 import { Card, CardBody, Col } from "reactstrap";
 
-const ExampleCard = () => {
+const FicheTechniqueDetails = () => {
   return (
     <Col md={12}>
       <Card>
@@ -18,4 +18,4 @@ const ExampleCard = () => {
   );
 };
 
-export default ExampleCard;
+export default FicheTechniqueDetails;

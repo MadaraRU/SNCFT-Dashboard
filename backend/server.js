@@ -4,6 +4,7 @@ const colors = require("colors");
 const dotenv = require("dotenv").config();
 const { errorHandler } = require("./middleware/errorMiddleware");
 const connectDB = require("./config/db");
+const router = require("./routes/parcRoutes");
 const port = process.env.PORT || 5000;
 
 connectDB();
@@ -17,6 +18,8 @@ app.use(cors());
 app.use("/api/parc", require("./routes/parcRoutes"));
 
 app.use("/api/users", require("./routes/userRoutes"));
+
+app.use("/api/mission", require("./routes/missionRoutes"));
 
 app.use(errorHandler);
 

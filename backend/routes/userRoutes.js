@@ -9,6 +9,8 @@ const {
   getUserById,
   getUserProfile,
   updateUserProfile,
+  getMission,
+  addMission,
 } = require("../controllers/userController");
 const { protect, admin } = require("../middleware/authMiddleware");
 
@@ -22,6 +24,7 @@ router
   .route("/:id")
   .delete(protect, admin, deleteUser)
   .get(protect, admin, getUserById);
+router.route("/:id/mission").get(protect, getMission).post(protect, addMission);
 router.get("/me", protect, getMe);
 
 module.exports = router;

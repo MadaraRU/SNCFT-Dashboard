@@ -16,6 +16,7 @@ import KeyVariantIcon from "mdi-react/KeyVariantIcon";
 import FingerprintIcon from "mdi-react/FingerprintIcon";
 import AccountOutlineIcon from "mdi-react/AccountOutlineIcon";
 import CardAccountDetailsIcon from "mdi-react/CardAccountDetailsIcon";
+import DepartementIcon from "mdi-react/DomainIcon";
 import "../style/style.css";
 
 import "primereact/resources/themes/bootstrap-sncft/theme5.css"; //theme
@@ -48,6 +49,7 @@ const ExampleCard = () => {
   const [userName, setUserName] = useState("");
   const [role, setRole] = useState("");
   const [password, setPassword] = useState("");
+  const [departement, setDepartement] = useState("");
 
   const handleShowPassword = () => {
     setIsPasswordShown(!isPasswordShown);
@@ -74,6 +76,7 @@ const ExampleCard = () => {
       userName,
       password,
       role,
+      departement,
     });
     if (data) {
       setFetchData(data);
@@ -137,7 +140,7 @@ const ExampleCard = () => {
         <PButton
           icon="pi pi-trash"
           className={
-            !rowData.isAdmin
+            rowData.userName !== user.userName
               ? `btn btn-danger btn-delete `
               : `btn btn-danger btn-delete disabled`
           }
@@ -172,11 +175,15 @@ const ExampleCard = () => {
     if (!user) {
       history.replace("/log_in");
     }
-    if (user && user.isAdmin) {
+    if ((user && user.isAdmin) || user.role === "admin") {
       dispatch(getUsers());
     }
 
     if (fetchedData) {
+      dispatch(getUsers());
+    }
+
+    if (deleted) {
       dispatch(getUsers());
     }
 
@@ -211,7 +218,7 @@ const ExampleCard = () => {
                           width: "100%",
                         }}
                       >
-                        <ModalBody style={{ height: "50vh" }}>
+                        <ModalBody>
                           <div className="form__form-group">
                             <span className="form__form-group-label">
                               Username
@@ -297,14 +304,38 @@ const ExampleCard = () => {
                                 <option value={role} disabled hidden>
                                   Choisir un rôle
                                 </option>
+                                <option value="admin">admin</option>
                                 <option value="responsable">responsable</option>
                                 <option value="user">user</option>
                               </select>
                             </div>
                           </div>
+                          {role === "responsable" && (
+                            <div className="form__form-group">
+                              <span className="form__form-group-label">
+                                Departement
+                              </span>
+                              <div className="form__form-group-field">
+                                <div className="form__form-group-icon">
+                                  <DepartementIcon color="#1f2f61" />
+                                </div>
+                                <input
+                                  name="departement"
+                                  className="modal-input"
+                                  type="text"
+                                  id="departement"
+                                  placeholder="Departement"
+                                  value={departement}
+                                  onChange={(e) =>
+                                    setDepartement(e.target.value)
+                                  }
+                                />
+                              </div>
+                            </div>
+                          )}
                         </ModalBody>
                         <ModalFooter>
-                          <Button color="success" type="submit">
+                          <Button color="primary" type="submit">
                             Ajouter
                           </Button>
                         </ModalFooter>
@@ -316,49 +347,6 @@ const ExampleCard = () => {
             </Row>
           </div>
           <div>
-            {/* <Table
-              className="admin-table"
-              responsive
-              borderless
-              hover
-              cellPadding={0}
-              cellSpacing={0}
-            >
-              <thead>
-                <tr>
-                  <th scope="col">Nom</th>
-                  <th scope="col">Username</th>
-                  <th scope="col">Role</th>
-                  <th scope="col">Action</th>
-                </tr>
-              </thead>
-              {users.map((user) => {
-                return (
-                  <tbody key={user._id}>
-                    <tr>
-                      <td>{user.name}</td>
-                      <td>{user.userName}</td>
-                      <td>{user.role}</td>
-                      <td>
-                        <button
-                          style={{
-                            border: "none",
-                          }}
-                          className="btn-outline-danger btn-sm 
-                          "
-                          onClick={() => {
-                            dispatch(deleteUser(user._id));
-                            setDeleted(!deleted);
-                          }}
-                        >
-                          <DeleteIcon />
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                );
-              })}
-            </Table> */}
             <Toast ref={deleteToast} />
             <Toast ref={addToast} />
             {header}
@@ -378,6 +366,11 @@ const ExampleCard = () => {
               <Column field="name" header="Nom" sortable></Column>
               <Column field="userName" header="Username" sortable></Column>
               <Column field="role" header="Role" sortable></Column>
+              <Column
+                field="departement"
+                header="Departement"
+                sortable
+              ></Column>
               <Column header="Action" body={DeleteButton}></Column>
             </DataTable>
           </div>

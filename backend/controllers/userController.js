@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
+const Mission = require("../models/missionModel");
 
 // @desc    GET all users
 // @route   GET /api/users
@@ -42,7 +43,7 @@ const deleteUser = asyncHandler(async (req, res) => {
 // @route   POST /api/users
 // @access  Public
 const registerUser = asyncHandler(async (req, res) => {
-  const { name, userName, password, role } = req.body;
+  const { name, userName, password, role, departement } = req.body;
 
   if (!name || !userName || !password || !role) {
     res.status(400);
@@ -58,15 +59,16 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 
   // Hash password
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(password, salt);
+  // const salt = await bcrypt.genSalt(10);
+  // const hashedPassword = await bcrypt.hash(password, salt);
 
   // Create user
   const user = await User.create({
     name,
     userName,
-    password: hashedPassword,
+    password,
     role,
+    departement,
   });
 
   if (user) {
@@ -76,6 +78,7 @@ const registerUser = asyncHandler(async (req, res) => {
       userName: user.userName,
       isAdmin: user.isAdmin,
       role: user.role,
+      departement: user.departement,
       token: generateToken(user._id),
     });
   } else {
@@ -100,6 +103,7 @@ const loginUser = asyncHandler(async (req, res) => {
       userName: user.userName,
       isAdmin: user.isAdmin,
       role: user.role,
+      departement: user.departement,
       token: generateToken(user._id),
     });
   } else {
@@ -128,6 +132,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
       userName: user.userName,
       isAdmin: user.isAdmin,
       role: user.role,
+      departement: user.departement,
     });
   } else {
     res.status(404);
@@ -165,10 +170,61 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
+const getMission = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id).populate("mission");
+  res.status(200).json(user.mission);
+});
+
+// @desc    add mission
+// @route   POST /api/users/:id/mission
+// @access  Private
+
+const addMission = asyncHandler(async (req, res) => {
+  if (!req.body.nom) {
+    res.status(400);
+    throw new Error("Please add a nom field");
+  }
+  if (!req.body.nomAgent) {
+    res.status(400);
+    throw new Error("Please add a nomAgent field");
+  }
+  if (!req.body.matricule) {
+    res.status(400);
+    throw new Error("Please add a matricule field");
+  }
+  if (!req.body.dateDeMission) {
+    res.status(400);
+    throw new Error("Please add a dateDeMission field");
+  }
+  if (!req.body.destination) {
+    res.status(400);
+    throw new Error("Please add a destination field");
+  }
+  // Create a new car
+  const newMission = new Mission(req.body);
+
+  // Get user
+  const user = await User.findById(req.params.id);
+
+  // Assing a user as a mission user
+  newMission.user = user;
+
+  // save the car
+  await newMission.save();
+
+  // Add mission to the user's mission array
+  user.mission.push(newMission);
+
+  // save the user
+  await user.save();
+
+  res.status(201).json(newMission);
+});
+
 // Generate JWT
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: "30d",
+    expiresIn: "360d",
   });
 };
 
@@ -181,4 +237,6 @@ module.exports = {
   getUserById,
   getUserProfile,
   updateUserProfile,
+  addMission,
+  getMission,
 };
