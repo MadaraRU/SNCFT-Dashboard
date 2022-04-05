@@ -94,6 +94,17 @@ const SidebarContent = ({ onClick }) => {
           onClick={handleHideSidebar}
         />
       </ul>
+
+      {user && user.role === "admin" && (
+        <ul className="sidebar__block">
+          <SidebarLink
+            icon="history"
+            title="Historique"
+            route="/dashboard/home"
+            onClick={handleHideSidebar}
+          />
+        </ul>
+      )}
     </div>
   );
 };

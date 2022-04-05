@@ -1,6 +1,5 @@
 const asyncHandler = require("express-async-handler");
 const Mission = require("../models/missionModel");
-const moment = require("moment");
 
 // @desc  Get Mission
 // @route GET /api/mission
@@ -80,9 +79,28 @@ const updateMissionToFini = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc  update Mission to annuller
+// @route PUT /api/mission/:id/annuller
+// @access Private
+
+const updateMissionToAnnuller = asyncHandler(async (req, res) => {
+  const mission = await Mission.findById(req.params.id);
+
+  if (mission) {
+    mission.missionStatus = "annuller";
+    mission.description = req.body.description;
+    const updatedMission = await mission.save();
+    res.json(updatedMission);
+  } else {
+    res.status(404);
+    throw new Error("Mission not found");
+  }
+});
+
 module.exports = {
   getMission,
   addMission,
   getMissionById,
   updateMissionToFini,
+  updateMissionToAnnuller,
 };

@@ -99,12 +99,22 @@ const parcSlice = createSlice({
   name: "parc",
   initialState,
   reducers: {
-    reset: (state) => {
+    resetP: (state) => {
       state.isSuccess = false;
       state.isError = false;
       state.isLoading = false;
       state.message = "";
+      state.parc = [];
     },
+
+    resetC: (state) => {
+      state.isSuccess = false;
+      state.isError = false;
+      state.isLoading = false;
+      state.message = "";
+      state.cars = [];
+    },
+    reset: (state) => initialState,
   },
   extraReducers: (builder) => {
     builder
@@ -176,5 +186,5 @@ const parcSlice = createSlice({
   },
 });
 
-export const { reset } = parcSlice.actions;
+export const { resetC, resetP, reset } = parcSlice.actions;
 export default parcSlice.reducer;

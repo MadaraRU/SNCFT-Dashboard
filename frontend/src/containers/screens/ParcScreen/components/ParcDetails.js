@@ -169,6 +169,7 @@ const ParcDetails = (props) => {
     return (
       <a
         className="btn-show-car"
+        href="#car"
         onClick={() => {
           props.onShow(rowData._id);
         }}

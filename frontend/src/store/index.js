@@ -6,6 +6,7 @@ import parcReducer from "./parc/parcSlice";
 import missionReducer from "./mission/missionSlice";
 import missionUReducer from "./userOwnMission/missionUSlice";
 import missionPReducer from "./parcOwnMission/missionPSlice";
+import carsPReducer from "./parcOwnCars/carsPSlice";
 
 const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ const store = configureStore({
     mission: missionReducer,
     missionU: missionUReducer,
     missionP: missionPReducer,
+    carsP: carsPReducer,
   },
 });
 

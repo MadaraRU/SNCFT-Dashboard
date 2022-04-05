@@ -1,8 +1,9 @@
 import React, { useState } from "react";
+import ScrollToTop from "react-scroll-to-top";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { Col, Container, Row } from "reactstrap";
-import CarburantDetails from "./components/CarburantDetails";
+// import CarburantDetails from "./components/CarburantDetails";
 import CarsDetails from "./components/CarsDetails";
 import ParcDetails from "./components/ParcDetails";
 
@@ -22,6 +23,8 @@ const ExamplePage = (props) => {
 
   return (
     <Container className="dashboard">
+      <ScrollToTop smooth color="#1F2F61" top="100" />
+
       <Row>
         <Col md={12}>
           <h3 className="page-title">Gestion de Parc</h3>
@@ -31,12 +34,12 @@ const ExamplePage = (props) => {
         <ParcDetails onShow={showCarId} />
       </Row>
       <Row>
-        <Col md={6}>
+        <Col md={12}>
           <CarsDetails cardId={cardId} />
         </Col>
-        <Col md={6}>
+        {/* <Col md={6}>
           <CarburantDetails />
-        </Col>
+        </Col> */}
       </Row>
     </Container>
   );

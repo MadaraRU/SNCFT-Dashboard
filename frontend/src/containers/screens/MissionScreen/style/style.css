@@ -62,3 +62,11 @@ button.p-button.p-component.btn.btn-info.p-button-rounded.p-button-icon-only {
   font-size: 20px;
   padding: 2px;
 }
+
+.status-annuller {
+  background-color: #ffcdd2;
+  color: #c63737;
+  font-weight: 600;
+  font-size: 20px;
+  padding: 2px;
+}

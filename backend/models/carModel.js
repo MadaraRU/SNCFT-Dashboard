@@ -19,6 +19,14 @@ const carSchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Carburant",
     },
+    etat: {
+      type: String,
+      required: true,
+      default: "marche",
+    },
+    description: {
+      type: String,
+    },
     parc: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Parc",

@@ -95,6 +95,14 @@ export const usersSlice = createSlice({
       state.isLoading = false;
       state.message = "";
     },
+    resetProfile: (state) => {
+      state.profile = [];
+      state.isError = false;
+      state.isSuccess = false;
+      state.isLoading = false;
+      state.message = "";
+    },
+    resetAll: (state) => initialState,
   },
   extraReducers: (builder) => {
     builder
@@ -155,5 +163,5 @@ export const usersSlice = createSlice({
   },
 });
 
-export const { reset } = usersSlice.actions;
+export const { reset, resetProfile, resetAll } = usersSlice.actions;
 export default usersSlice.reducer;

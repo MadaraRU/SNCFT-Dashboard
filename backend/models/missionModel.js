@@ -29,6 +29,10 @@ const missionSchema = mongoose.Schema(
       required: true,
       default: "en cours",
     },
+    description: {
+      type: String,
+      default: "",
+    },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

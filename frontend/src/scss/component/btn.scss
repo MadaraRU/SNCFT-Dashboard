@@ -164,7 +164,7 @@
   }
 
   &.btn-primary {
-    background-color: $color-blue;
+    background-color: $color-blue !important;
     border-color: $color-blue;
 
     &:before {
@@ -281,8 +281,8 @@
   }
 
   &.btn-danger {
-    background-color: $color-red;
-    border-color: $color-red;
+    background-color: $color-red !important;
+    border-color: $color-red !important;
 
     &:before {
       background-color: $color-red-hover;

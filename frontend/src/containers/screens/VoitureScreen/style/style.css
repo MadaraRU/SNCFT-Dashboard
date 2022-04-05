@@ -8,10 +8,18 @@
   border-color: #c8d0dd;
 }
 
-.admin-table td {
+.p-datatable .p-datatable-tbody > tr > td {
+  padding: 0;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  padding-left: 5px;
+  font-size: medium;
+}
+
+/* .admin-table td {
   vertical-align: middle;
   font-size: 14px;
-}
+} */
 
 .modal-input {
   border-color: #1f2f61;
@@ -27,6 +35,16 @@
 .btn-show-car {
   cursor: pointer;
   font-size: large;
+}
+
+button.p-button.p-component.btn.btn-info.p-button-rounded.p-button-icon-only {
+  color: white;
+  background-color: #0dcaf0 !important;
+  border-color: #0dcaf0 !important;
+}
+
+.hidden {
+  display: none;
 }
 
 .etat-marche {
@@ -45,12 +63,7 @@
   padding: 2px;
 }
 
-button.p-button.p-component.btn.btn-info.p-button-rounded.p-button-icon-only {
-  color: white;
-  background-color: #0dcaf0 !important;
-  border-color: #0dcaf0 !important;
-}
-
-.hidden {
-  display: none;
+button.p-button.p-component.p-confirm-dialog-accept.btn.btn-danger {
+  background-color: #ff4861 !important;
+  border-color: #ff4861 !important;
 }

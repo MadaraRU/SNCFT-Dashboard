@@ -65,13 +65,13 @@ const missionSliceP = createSlice({
   name: "missionP",
   initialState,
   reducers: {
-    // reset: (state) => {
-    //   state.isSuccess = false;
-    //   state.isError = false;
-    //   state.isLoading = false;
-    //   state.message = "";
-    // },
-    reset: (state) => initialState,
+    reset: (state) => {
+      state.isSuccess = false;
+      state.isError = false;
+      state.isLoading = false;
+      state.message = "";
+    },
+    resetAll: (state) => initialState,
   },
 
   extraReducers: (builder) => {
@@ -118,5 +118,5 @@ const missionSliceP = createSlice({
   },
 });
 
-export const { reset } = missionSliceP.actions;
+export const { reset, resetAll } = missionSliceP.actions;
 export default missionSliceP.reducer;
