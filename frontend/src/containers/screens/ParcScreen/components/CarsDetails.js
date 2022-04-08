@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import {
   Card,
@@ -19,6 +19,7 @@ import { Button } from "primereact/button";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { confirmDialog } from "primereact/confirmdialog";
+import { Toast } from "primereact/toast";
 import {
   deleteCar,
   getAllCars,
@@ -31,6 +32,11 @@ const CarsDetails = (props) => {
   const [isRemoved, setIsRemoved] = useState();
   const [isAdded, setIsAdded] = useState();
   const [isUnbroken, setIsUnbroken] = useState(false);
+
+  // Toast handler
+  const validationToast = useRef(null);
+  const deleteToast = useRef(null);
+  const duplicationErrorToast = useRef(null);
 
   // Modal Handler
   const [modal, setModal] = useState(false);
@@ -69,15 +75,36 @@ const CarsDetails = (props) => {
         Authorization: `Bearer ${user.token}`,
       },
     };
-    const response = axios.post(
-      `http://localhost:5000/api/parc/${props.cardId}/cars`,
-      car,
-      config
-    );
-    if (response) {
-      setIsAdded(!isAdded);
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/parc/${props.cardId}/cars`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+          body: JSON.stringify(car),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message);
+      }
+      if (response.ok) {
+        setIsAdded(!isAdded);
+      }
+    } catch (error) {
+      if (error) {
+        duplicationErrorToast.current.show({
+          severity: "error",
+          summary: "Error Message",
+          detail: `${error.message}`,
+        });
+      }
     }
-    return response.data;
   };
 
   //form submit
@@ -85,6 +112,12 @@ const CarsDetails = (props) => {
     e.preventDefault();
 
     if (!matricule || !modele || !marque) {
+      validationToast.current.show({
+        severity: "warn",
+        summary: "Warn Message",
+        detail: "veuillez remplir le formulaire.",
+        life: 3000,
+      });
       return;
     }
 
@@ -122,7 +155,14 @@ const CarsDetails = (props) => {
         rejectLabel: "Non",
         acceptClassName: "btn btn-danger",
         rejectClassName: "btn btn-primary",
-        accept: () => removeCar(),
+        accept: () => {
+          removeCar();
+          deleteToast.current.show({
+            severity: "info",
+            summary: "Info Message",
+            detail: "Voiture suprimé",
+          });
+        },
       });
     };
 
@@ -166,6 +206,22 @@ const CarsDetails = (props) => {
         className={rowData.etat === "marche" ? `etat-marche` : `etat-panne`}
       >
         {rowData.etat}
+      </span>
+    );
+  };
+
+  // car status template
+
+  const statusTemplate = (rowData) => {
+    return (
+      <span
+        className={
+          rowData.status === "disponible"
+            ? `status-car__disponible`
+            : `status-car__mission`
+        }
+      >
+        {rowData.status}
       </span>
     );
   };
@@ -291,11 +347,15 @@ const CarsDetails = (props) => {
                   </div>
                 </ModalBody>
                 <ModalFooter>
-                  <Button color="primary">Ajouter</Button>
+                  <Button className="btn btn-primary">Ajouter</Button>
                 </ModalFooter>
               </div>
             </form>
           </Modal>
+
+          <Toast ref={validationToast} />
+          <Toast ref={deleteToast} />
+          <Toast ref={duplicationErrorToast} />
 
           <div>
             <p
@@ -324,6 +384,7 @@ const CarsDetails = (props) => {
               <Column field="modele" header="Modele" sortable />
               <Column field="matricule" header="Matricule" sortable />
               <Column body={etatTemplate} header="Etat" />
+              <Column header="Status" body={statusTemplate} />
               <Column header="Action" body={actionsTemplate} />
             </DataTable>
           </div>

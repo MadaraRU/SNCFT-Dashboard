@@ -104,6 +104,20 @@ const VoitureDetails = () => {
     );
   };
 
+  const statusTemplate = (rowData) => {
+    return (
+      <span
+        className={
+          rowData.status === "disponible"
+            ? `status-car__disponible`
+            : `status-car__mission`
+        }
+      >
+        {rowData.status}
+      </span>
+    );
+  };
+
   const actionTemplate = (rowData) => {
     const updateCarToBroken = async () => {
       const response = axios.put(
@@ -320,6 +334,7 @@ const VoitureDetails = () => {
               <Column field="modele" header="Modele" sortable />
               <Column field="matricule" header="Matricule" sortable />
               <Column body={etatTemplate} header="Etat" sortable />
+              <Column body={statusTemplate} header="Status" sortable />
               <Column body={actionTemplate} header="Action" />
               {/* <Column header="Action" body={actionsTemplate} /> */}
             </DataTable>

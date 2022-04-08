@@ -7,6 +7,8 @@ const initialState = {
   isLoading: false,
   isSuccess: false,
   isError: false,
+  isAddError: false,
+  isAddSuccess: false,
   message: "",
 };
 
@@ -136,12 +138,12 @@ const parcSlice = createSlice({
       })
       .addCase(setParc.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.isSuccess = true;
+        state.isAddSuccess = true;
         state.parc.push(action.payload);
       })
       .addCase(setParc.rejected, (state, action) => {
         state.isLoading = false;
-        state.isError = true;
+        state.isAddError = true;
         state.message = action.payload;
       })
       .addCase(updateParc.pending, (state) => {

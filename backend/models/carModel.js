@@ -24,6 +24,10 @@ const carSchema = mongoose.Schema(
       required: true,
       default: "marche",
     },
+    status: {
+      type: String,
+      default: "disponible",
+    },
     description: {
       type: String,
     },

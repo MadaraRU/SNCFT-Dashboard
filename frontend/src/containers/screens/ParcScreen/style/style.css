@@ -45,6 +45,22 @@
   padding: 2px;
 }
 
+.status-car__mission {
+  background-color: #eccfff;
+  color: #694382;
+  font-weight: 600;
+  font-size: 20px;
+  padding: 2px;
+}
+
+.status-car__disponible {
+  background-color: #b3e5fc;
+  color: #23547b;
+  font-weight: 600;
+  font-size: 20px;
+  padding: 2px;
+}
+
 button.p-button.p-component.btn.btn-info.p-button-rounded.p-button-icon-only {
   color: white;
   background-color: #0dcaf0 !important;

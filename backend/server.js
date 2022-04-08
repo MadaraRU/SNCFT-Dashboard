@@ -23,6 +23,8 @@ app.use("/api/mission", require("./routes/missionRoutes"));
 
 app.use("/api/voiture", require("./routes/carRoutes"));
 
+// app.use("/api/archive", require("./routes/archiveRoutes"));
+
 app.use(errorHandler);
 
 app.listen(port, () => console.log(`Server started on port ${port}`));

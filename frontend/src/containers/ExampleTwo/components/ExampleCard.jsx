@@ -33,6 +33,9 @@ const ExampleCard = () => {
   const { users, isError, message } = useSelector((state) => state.users);
   const { user } = useSelector((state) => state.auth);
 
+  const duplicationErrorToast = useRef(null);
+  const [duplicationErrorMessage, setDuplicationErrorMessage] = useState("");
+
   // Modal Handler
   const [modal, setModal] = useState(false);
   const toggle = () => setModal(!modal);
@@ -62,8 +65,12 @@ const ExampleCard = () => {
   } = useSelector((state) => state.register);
 
   useEffect(() => {
-    if (isError) {
-      toast.error(message);
+    if (errMessage) {
+      duplicationErrorToast.current.show({
+        severity: "error",
+        summary: "Error Message",
+        detail: `${regMessage}`,
+      });
     }
 
     dispatch(rst());
@@ -71,25 +78,79 @@ const ExampleCard = () => {
 
   //  add user api
   const addUser = async () => {
-    const { data } = await axios.post("/api/users", {
-      name: nom,
-      userName,
-      password,
-      role,
-      departement,
-    });
-    if (data) {
-      setFetchData(data);
+    // try {
+    //   const response = await axios.post("/api/users", {
+    //     name: nom,
+    //     userName,
+    //     password,
+    //     role,
+    //     departement,
+    //   });
+
+    //   console.log(response);
+
+    //   if (response.data) {
+    //     setFetchData(data);
+    //   }
+    // } catch (error) {
+    //   console.log(first)
+    // }
+
+    try {
+      const response = await fetch("/api/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: nom,
+          userName,
+          password,
+          role,
+          departement,
+        }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message);
+      }
+
+      if (response.ok) {
+        setFetchData(data);
+      }
+    } catch (error) {
+      if (error) {
+        duplicationErrorToast.current.show({
+          severity: "error",
+          summary: "Error Message",
+          detail: `${error.message}`,
+        });
+      }
     }
+
+    // if (response.data?.message) {
+    //   duplicationErrorToast.current.show({
+    //     severity: "error",
+    //     summary: "Error Message",
+    //     detail: `${data?.message}`,
+    //   });
+    // }
   };
 
   const addToast = useRef(null);
+  const validationToast = useRef(null);
 
   // Form submit
   const onSubmit = (e) => {
     e.preventDefault();
 
     if (!password || !userName || !nom || !role) {
+      validationToast.current.show({
+        severity: "warn",
+        summary: "Warn Message",
+        detail: "veuillez remplir le formulaire.",
+        life: 3000,
+      });
       return;
     } else {
       addUser();
@@ -169,7 +230,7 @@ const ExampleCard = () => {
 
   useEffect(() => {
     if (isError) {
-      console.log(message);
+      toast.error(message);
     }
 
     if (!user) {
@@ -306,7 +367,6 @@ const ExampleCard = () => {
                                 </option>
                                 <option value="admin">admin</option>
                                 <option value="responsable">responsable</option>
-                                <option value="user">user</option>
                               </select>
                             </div>
                           </div>
@@ -349,6 +409,8 @@ const ExampleCard = () => {
           <div>
             <Toast ref={deleteToast} />
             <Toast ref={addToast} />
+            <Toast ref={validationToast} />
+            <Toast ref={duplicationErrorToast} />
             {header}
             <DataTable
               value={users}

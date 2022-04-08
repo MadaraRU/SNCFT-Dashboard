@@ -30,6 +30,13 @@ const getParcById = asyncHandler(async (req, res) => {
 // @route POST /api/parc
 // @access Private
 const setParc = asyncHandler(async (req, res) => {
+  const parcExists = await Parc.findOne({ reference: req.body.reference });
+
+  if (parcExists) {
+    res.status(400);
+    throw new Error("Parc existe déjà");
+  }
+
   if (!req.body.reference) {
     res.status(400);
     throw new Error("Please add a reference field");
@@ -93,6 +100,13 @@ const getParcCars = asyncHandler(async (req, res) => {
 const addParcCars = asyncHandler(async (req, res) => {
   // Create a new car
   const newCar = new Car(req.body);
+
+  const existedCar = await Car.findOne({ matricule: req.body.matricule });
+
+  if (existedCar) {
+    res.status(400);
+    throw new Error("Voiture existe déjà");
+  }
 
   // Get parc
   const parc = await Parc.findById(req.params.id);

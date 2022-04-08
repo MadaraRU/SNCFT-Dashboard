@@ -20,6 +20,7 @@ import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
 import { confirmDialog } from "primereact/confirmdialog";
+import { Toast } from "primereact/toast";
 import NomMissionIcon from "mdi-react/HighwayIcon";
 import NomAgent from "mdi-react/HatFedoraIcon";
 import DateIcon from "mdi-react/CalendarMonthIcon";
@@ -61,6 +62,14 @@ const MissionDetails = () => {
   const [modalC, setModalC] = useState(false);
   const toggleC = () => setModalC(!modalC);
 
+  const [selectedCarId, setSelectedCarId] = useState("");
+
+  // Toast handler
+  const validationToast = useRef(null);
+  const addToast = useRef(null);
+  const missionFiniToast = useRef(null);
+  const missionAnnullerToast = useRef(null);
+
   // search Handler
   const [globalFilter, setGlobalFilter] = useState(null);
   const [globalFilter1, setGlobalFilter1] = useState(null);
@@ -75,7 +84,7 @@ const MissionDetails = () => {
   const [dateDeMission, setDateDeMission] = useState("");
   const [destination, setDistination] = useState("");
 
-  // Car Data
+  // mission Data
 
   const dateFormatter = (rowData) => {
     return rowData.dateDeMission.substr(0, 10);
@@ -95,6 +104,42 @@ const MissionDetails = () => {
         {rowData.missionStatus}
       </span>
     );
+  };
+
+  // car status template
+
+  const carStatusTemplate = (rowData) => {
+    return (
+      <span
+        className={
+          rowData.status === "disponible"
+            ? `status-car__disponible`
+            : `status-car__mission`
+        }
+      >
+        {rowData.status}
+      </span>
+    );
+  };
+
+  // Car changing state handler
+  const getCarIdByMatricule = async (matricule) => {
+    const response = await axios.post("/api/voiture", {
+      matricule: matricule,
+    });
+    if (response) {
+      setSelectedCarId(await response.data);
+    }
+  };
+
+  const updateCarToAvailable = async (carId) => {
+    const response = await axios.put(`/api/voiture/${carId}/available`);
+    return response.data;
+  };
+
+  const updateCarToUnavailable = async (carId) => {
+    const response = await axios.put(`/api/voiture/${carId}/unavailable`);
+    return response.data;
   };
 
   // table header (Search field)
@@ -166,7 +211,16 @@ const MissionDetails = () => {
         acceptLabel: "Oui",
         rejectLabel: "Non",
         rejectClassName: "btn btn-primary",
-        accept: () => endMission(),
+        accept: () => {
+          endMission();
+          getCarIdByMatricule(rowData.matricule);
+          updateCarToAvailable(selectedCarId);
+          missionFiniToast.current.show({
+            severity: "success",
+            summary: "Success",
+            detail: "Mission fini",
+          });
+        },
       });
     };
     const confirmCancel = () => {
@@ -188,6 +242,11 @@ const MissionDetails = () => {
       cancelMission({ description });
       toggleC();
       setDescription("");
+      missionAnnullerToast.current.show({
+        severity: "info",
+        summary: "Info Message",
+        detail: "Mission annuller",
+      });
     };
 
     return (
@@ -216,7 +275,9 @@ const MissionDetails = () => {
             >
               <ModalBody>
                 <div className="form__form-group">
-                  <span className="form__form-group-label">Raison: </span>
+                  <span className="form__form-group-label">
+                    Motif d'annulation:{" "}
+                  </span>
                   <div className="form__form-group-field">
                     <div className="form__form-group-icon">
                       <DescriptionIcon />
@@ -226,7 +287,7 @@ const MissionDetails = () => {
                       name="description"
                       type="text"
                       id="description"
-                      placeholder="Description..."
+                      placeholder="motif..."
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
                     />
@@ -250,14 +311,29 @@ const MissionDetails = () => {
   const submitHandler = (e) => {
     e.preventDefault();
     if (!nom || !nomAgent || !dateDeMission || !destination || !matricule) {
+      validationToast.current.show({
+        severity: "warn",
+        summary: "Warn Message",
+        detail: "veuillez remplir le formulaire.",
+        life: 3000,
+      });
       return;
     } else {
       toggle();
     }
-    // dispatch(
-    //   setMissions({ nom, nomAgent, dateDeMission, destination, matricule })
-    // );
+
+    // getCarIdByMatricule(matricule);
+
+    updateCarToUnavailable(selectedCarId);
+    console.log(selectedCarId);
+
     addMissionP({ nom, nomAgent, dateDeMission, destination, matricule });
+    addToast.current.show({
+      severity: "success",
+      summary: "Success",
+      detail: "Mission ajouté",
+      life: 3000,
+    });
 
     setNom("");
     setNomAgent("");
@@ -448,10 +524,14 @@ const MissionDetails = () => {
                           onChange={(e) => {
                             const selectedMatricule = e.target.value;
                             setMatricule(selectedMatricule);
+                            getCarIdByMatricule(selectedMatricule);
                           }}
                         >
                           {cars
-                            ?.filter((c) => c.etat === "marche")
+                            ?.filter(
+                              (c) =>
+                                c.etat === "marche" && c.status === "disponible"
+                            )
                             .map((c) => {
                               return (
                                 <option key={c._id} value={c.matricule}>
@@ -469,6 +549,10 @@ const MissionDetails = () => {
                 </div>
               </form>
             </Modal>
+            <Toast ref={validationToast} />
+            <Toast ref={addToast} />
+            <Toast ref={missionFiniToast} />
+            <Toast ref={missionAnnullerToast} />
 
             <div>
               {header}
@@ -548,6 +632,7 @@ const MissionDetails = () => {
                     <Column field="marque" header="Marque" />
                     <Column field="matricule" header="Matricule" />
                     <Column field="modele" header="Modele" />
+                    <Column body={carStatusTemplate} header="Status" />
                   </DataTable>
                 </CardBody>
               </Card>
@@ -630,7 +715,7 @@ const MissionDetails = () => {
                   <Column body={statusTemplate} header="Status" sortable />
                   <Column
                     field="description"
-                    header="Raison"
+                    header="Motif d'annulation"
                     style={{ width: "25%" }}
                   />
                 </DataTable>

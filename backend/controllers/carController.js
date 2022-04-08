@@ -33,8 +33,8 @@ const updateCarToBroken = asyncHandler(async (req, res) => {
 
   if (voiture) {
     voiture.etat = "en panne";
-    const updatedMission = await voiture.save();
-    res.json(updatedMission);
+    const updatedState = await voiture.save();
+    res.json(updatedState);
   } else {
     res.status(404);
     throw new Error("Car not found");
@@ -48,11 +48,55 @@ const updateCarToUnbroken = asyncHandler(async (req, res) => {
 
   if (voiture) {
     voiture.etat = "marche";
-    const updatedMission = await voiture.save();
-    res.json(updatedMission);
+    const updatedState = await voiture.save();
+    res.json(updatedState);
   } else {
     res.status(404);
     throw new Error("Car not found");
+  }
+});
+
+// @desc    Update car to Unavailable
+// @route   PUT /api/voiture/:id/Unavailable
+// @access  Private
+const updateCarToUnavailable = asyncHandler(async (req, res) => {
+  const voiture = await Car.findById(req.params.id);
+
+  if (voiture) {
+    voiture.status = "en mission";
+    const updatedStatus = await voiture.save();
+    res.json(updatedStatus);
+  } else {
+    res.status(404);
+    throw new Error("Car not found");
+  }
+});
+
+// @desc    Update car to available
+// @route   PUT /api/voiture/:id/available
+// @access  Private
+const updateCarToAvailable = asyncHandler(async (req, res) => {
+  const voiture = await Car.findById(req.params.id);
+
+  if (voiture) {
+    voiture.status = "disponible";
+    const updatedStatus = await voiture.save();
+    res.json(updatedStatus);
+  } else {
+    res.status(404);
+    throw new Error("Car not found");
+  }
+});
+
+// // @desc    get card Id by matricule
+// @route   post /api/voiture/:
+// @access  Private
+
+const getCarIdByMatricule = asyncHandler(async (req, res) => {
+  const selectedCar = await Car.findOne({ matricule: req.body.matricule });
+
+  if (selectedCar) {
+    res.json(selectedCar._id);
   }
 });
 
@@ -61,4 +105,7 @@ module.exports = {
   deleteVoiture,
   updateCarToBroken,
   updateCarToUnbroken,
+  updateCarToAvailable,
+  updateCarToUnavailable,
+  getCarIdByMatricule,
 };

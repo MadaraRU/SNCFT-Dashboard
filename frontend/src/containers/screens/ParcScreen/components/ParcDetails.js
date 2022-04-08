@@ -36,7 +36,14 @@ const ParcDetails = (props) => {
   const dispatch = useDispatch();
 
   const { user } = useSelector((state) => state.auth);
-  const { parc } = useSelector((state) => state.parc);
+  const {
+    parc,
+    isAddError,
+    isAddSuccess,
+    message: errorMessage,
+
+    isLoading,
+  } = useSelector((state) => state.parc);
 
   // Modal handler
   const [modal, setModal] = useState(false);
@@ -69,37 +76,11 @@ const ParcDetails = (props) => {
     }));
   };
 
+  // toast handler
+  const duplicationError = useRef(null);
+  const validationToast = useRef(null);
   const addToast = useRef(null);
   const updateToast = useRef(null);
-
-  const submitHandler = (e) => {
-    e.preventDefault(e);
-
-    if (!departement || !reference || !localisation) {
-      setRefIsValid(false);
-      setDepartIsValid(false);
-      setLocalIsValid(false);
-      return;
-    } else {
-      toggle();
-      setRefIsValid(true);
-      setDepartIsValid(true);
-      setLocalIsValid(true);
-    }
-
-    dispatch(setParc({ reference, localisation, departement }));
-    addToast.current.show({
-      severity: "success",
-      summary: "Success",
-      detail: "Parc ajouté",
-      life: 3000,
-    });
-    setFormData({
-      reference: "",
-      departement: "",
-      localisation: "",
-    });
-  };
 
   //form update handler
   const [formDataU, setFormDataU] = useState({
@@ -221,6 +202,7 @@ const ParcDetails = (props) => {
         },
       });
     };
+    setIsDeleted(false);
 
     return (
       <>
@@ -241,6 +223,56 @@ const ParcDetails = (props) => {
     );
   };
 
+  const submitHandler = (e) => {
+    e.preventDefault(e);
+
+    dispatch(setParc({ reference, localisation, departement }));
+
+    if (!departement || !reference || !localisation) {
+      setRefIsValid(false);
+      setDepartIsValid(false);
+      setLocalIsValid(false);
+      validationToast.current.show({
+        severity: "warn",
+        summary: "Warn Message",
+        detail: "veuillez remplir le formulaire.",
+        life: 3000,
+      });
+      return;
+    }
+
+    if (isAddSuccess) {
+      addToast.current.show({
+        severity: "success",
+        summary: "Success",
+        detail: "Parc ajouté",
+        life: 3000,
+      });
+    }
+
+    if (isAddError) {
+      duplicationError.current.show({
+        severity: "error",
+        summary: "Error Message",
+        detail: `${errorMessage}`,
+        id: "err",
+      });
+      return;
+    }
+
+    setRefIsValid(true);
+    setDepartIsValid(true);
+    setLocalIsValid(true);
+
+    toggle();
+
+    setFormData({
+      reference: "",
+      departement: "",
+      localisation: "",
+    });
+  };
+
   // Get parc
 
   useEffect(() => {
@@ -249,6 +281,24 @@ const ParcDetails = (props) => {
     }
 
     dispatch(getParcs());
+
+    if (isAddSuccess) {
+      addToast.current.show({
+        severity: "success",
+        summary: "Success",
+        detail: "Parc ajouté",
+        life: 3000,
+      });
+    }
+
+    if (isAddError) {
+      duplicationError.current.show({
+        severity: "error",
+        summary: "Error Message",
+        detail: `${errorMessage}`,
+        id: "err",
+      });
+    }
 
     if (isDeleted) {
       dispatch(getParcs());
@@ -261,7 +311,7 @@ const ParcDetails = (props) => {
     return () => {
       dispatch(reset());
     };
-  }, [dispatch, user, history, isDeleted, updated]);
+  }, [dispatch, user, history, isDeleted, updated, isAddError, isAddSuccess]);
 
   return (
     <Col md={12}>
@@ -390,7 +440,7 @@ const ParcDetails = (props) => {
                       </div>
                     </ModalBody>
                     <ModalFooter>
-                      <Button color="success" type="submit">
+                      <Button className="btn btn-primary" type="submit">
                         Ajouter
                       </Button>
                     </ModalFooter>
@@ -502,6 +552,8 @@ const ParcDetails = (props) => {
             <Toast ref={addToast} />
             <Toast ref={deleteToast} />
             <Toast ref={updateToast} />
+            <Toast ref={duplicationError} />
+            <Toast ref={validationToast} />
             {header}
             <DataTable
               value={parc}
