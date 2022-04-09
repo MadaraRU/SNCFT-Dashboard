@@ -36,6 +36,12 @@ const carSchema = mongoose.Schema(
       ref: "Parc",
       required: true,
     },
+    papers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "CarPapers",
+      },
+    ],
   },
   {
     timestamps: true,

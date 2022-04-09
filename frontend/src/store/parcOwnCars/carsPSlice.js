@@ -10,7 +10,7 @@ const initialState = {
 };
 
 export const getAllCars = createAsyncThunk(
-  "cars/getAllP",
+  "carsP/getAllP",
   async (parcId, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token;
@@ -28,7 +28,7 @@ export const getAllCars = createAsyncThunk(
 );
 
 export const deleteCar = createAsyncThunk(
-  "cars/delete",
+  "carsP/delete",
   async (carId, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token;
@@ -46,7 +46,7 @@ export const deleteCar = createAsyncThunk(
 );
 
 const carsPSlice = createSlice({
-  name: "cars",
+  name: "carsP",
   initialState,
   reducers: {
     reset: (state) => {

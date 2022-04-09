@@ -203,14 +203,6 @@ const VoitureDetails = () => {
       dispatch(getAllCars(dp[0]?._id));
     }
 
-    // if (isAdded) {
-    //   dispatch(getAllCars(dp[0]?._id));
-    // }
-
-    // if (isRemoved) {
-    //   dispatch(getAllCars(dp[0]?._id));
-    // }
-
     return () => {
       dispatch(reset());
     };
