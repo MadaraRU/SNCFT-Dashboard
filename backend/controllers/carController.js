@@ -12,6 +12,21 @@ const getVoitures = asyncHandler(async (req, res) => {
   res.status(200).json(voiture);
 });
 
+// @desc  Get  cars by iD
+// @route GET /api/voiture/:id
+// @access Private
+
+const getVoituresById = asyncHandler(async (req, res) => {
+  const voiture = await Car.findById(req.params.id);
+
+  if (!voiture) {
+    res.status(404);
+    throw new Error("Voiture non trouvé");
+  }
+
+  res.status(200).json(voiture);
+});
+
 // @desc    DELETE car
 // @route   DELETE /api/voiture/:id
 // @access  Private
@@ -138,6 +153,7 @@ const addCarPapers = asyncHandler(async (req, res) => {
 
 module.exports = {
   getVoitures,
+  getVoituresById,
   deleteVoiture,
   updateCarToBroken,
   updateCarToUnbroken,

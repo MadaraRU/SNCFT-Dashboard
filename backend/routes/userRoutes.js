@@ -13,8 +13,12 @@ const {
   addMission,
 } = require("../controllers/userController");
 const { protect, admin } = require("../middleware/authMiddleware");
+const { historyMiddleware } = require("../middleware/historyMiddleware");
 
-router.route("/").get(protect, admin, getUsers).post(registerUser);
+router
+  .route("/")
+  .get(protect, admin, getUsers)
+  .post(historyMiddleware, registerUser);
 router.post("/login", loginUser);
 router
   .route("/profile")
@@ -22,7 +26,7 @@ router
   .put(protect, updateUserProfile);
 router
   .route("/:id")
-  .delete(protect, admin, deleteUser)
+  .delete(protect, admin, historyMiddleware, deleteUser)
   .get(protect, admin, getUserById);
 router.route("/:id/mission").get(protect, getMission).post(protect, addMission);
 router.get("/me", protect, getMe);

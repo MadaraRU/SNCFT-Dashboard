@@ -14,6 +14,7 @@ const carSchema = mongoose.Schema(
       type: String,
       required: true,
       unique: true,
+      default_language: "ar",
     },
     carburant: {
       type: mongoose.Schema.Types.ObjectId,
@@ -49,3 +50,6 @@ const carSchema = mongoose.Schema(
 );
 
 module.exports = mongoose.model("Car", carSchema);
+// CarModel.createIndexes({ matricule: "text" }, { default_language: "arabic" });
+
+//  = CarModel;

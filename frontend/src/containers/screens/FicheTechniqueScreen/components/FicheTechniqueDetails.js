@@ -44,7 +44,7 @@ const FicheTechniqueDetails = (props) => {
     if (isSuccess) {
       dispatch(getAllCars(dp[0]?._id));
     }
-  }, [user, history, dispatch]);
+  }, [user, history, dispatch, dp[0]?._id]);
 
   return (
     <Col md={12}>

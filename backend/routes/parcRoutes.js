@@ -10,10 +10,15 @@ const {
   getParcById,
   getMission,
   addMission,
+  updateParcsCarTobroken,
 } = require("../controllers/parcController");
 const { admin, protect } = require("../middleware/authMiddleware");
+const { historyMiddleware } = require("../middleware/historyMiddleware");
 
-router.route("/").get(protect, getParc).post(protect, setParc);
+router
+  .route("/")
+  .get(protect, getParc)
+  .post(protect, historyMiddleware, setParc);
 router
   .route("/:id")
   .put(protect, updateParc)
@@ -22,6 +27,7 @@ router
 router.route("/:id/cars").get(protect, getParcCars).post(protect, addParcCars);
 router.route("/:id/mission").get(protect, getMission).post(protect, addMission);
 
+// router.route("/:id/cars/:id/broken").put(protect, updateParcsCarTobroken);
 // router.get("/", getParc);
 // router.post("/", setParc);
 // router.put("/:id", updateParc);

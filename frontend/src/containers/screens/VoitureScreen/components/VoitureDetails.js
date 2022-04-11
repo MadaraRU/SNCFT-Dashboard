@@ -118,15 +118,35 @@ const VoitureDetails = () => {
     );
   };
 
+  const matriculeTemplate = (rowData) => {
+    return <span dir="rtl">{rowData.matricule}</span>;
+  };
+
   const actionTemplate = (rowData) => {
     const updateCarToBroken = async () => {
-      const response = axios.put(
-        `http://localhost:5000/api/voiture/${rowData._id}/broken`
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      const response = await axios.put(
+        `http://localhost:5000/api/voiture/${rowData._id}/broken`,
+        "",
+        config
       );
       if (response) {
         setIsBroken(!isBroken);
       }
       return response.data;
+      // const response = await axios.put(
+      //   `http://localhost:5000/api/parc/${rowData.parc}/cars/${rowData._id}/broken`,
+      //   "",
+      //   config
+      // );
+      // if (response) {
+      //   setIsBroken(!isBroken);
+      // }
+      // return response.data;
     };
 
     const confirm = () => {
@@ -324,7 +344,7 @@ const VoitureDetails = () => {
             >
               <Column field="marque" header="Marque" sortable />
               <Column field="modele" header="Modele" sortable />
-              <Column field="matricule" header="Matricule" sortable />
+              <Column body={matriculeTemplate} header="Matricule" sortable />
               <Column body={etatTemplate} header="Etat" sortable />
               <Column body={statusTemplate} header="Status" sortable />
               <Column body={actionTemplate} header="Action" />

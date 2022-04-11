@@ -107,7 +107,8 @@ const ExampleCard = () => {
           userName,
           password,
           role,
-          departement,
+          departement:
+            departement.charAt(0).toUpperCase() + departement.slice(1),
         }),
       });
       const data = await response.json();

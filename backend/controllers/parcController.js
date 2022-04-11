@@ -8,6 +8,7 @@ const Mission = require("../models/missionModel");
 // @access Private
 const getParc = asyncHandler(async (req, res) => {
   const parc = await Parc.find();
+  // console.log(req);
 
   res.status(200).json(parc);
 });
@@ -56,6 +57,8 @@ const setParc = asyncHandler(async (req, res) => {
     departement: req.body.departement,
   });
 
+  // console.log(req);
+
   res.status(200).json(parc);
 });
 
@@ -95,6 +98,18 @@ const deleteParc = asyncHandler(async (req, res) => {
 const getParcCars = asyncHandler(async (req, res) => {
   const parc = await Parc.findById(req.params.id).populate("voiture");
   res.status(200).json(parc.voiture);
+});
+
+const updateParcsCarTobroken = asyncHandler(async (req, res) => {
+  const parc = await Parc.findById(req.params.id).populate("voiture");
+  if (parc.voiture) {
+    parc.voiture.etat = "en panne";
+    const updatedState = await Parc.save();
+    res.json(updatedState);
+  } else {
+    res.status(404);
+    throw new Error("Car not found");
+  }
 });
 
 const addParcCars = asyncHandler(async (req, res) => {
@@ -174,6 +189,8 @@ const addMission = asyncHandler(async (req, res) => {
   // save the parc
   await parc.save();
 
+  // console.log(req);
+
   res.status(201).json(newMission);
 });
 
@@ -205,4 +222,5 @@ module.exports = {
   getMission,
   addMission,
   updateMissionToFini,
+  updateParcsCarTobroken,
 };

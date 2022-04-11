@@ -47,7 +47,7 @@ button.p-button.p-component.btn.btn-info.p-button-rounded.p-button-icon-only {
   display: none;
 }
 
-.status-fini {
+/* .status-fini {
   background: #c8e6c9;
   color: #256029;
   font-weight: 600;
@@ -85,4 +85,66 @@ button.p-button.p-component.btn.btn-info.p-button-rounded.p-button-icon-only {
   font-weight: 600;
   font-size: 20px;
   padding: 2px;
+} */
+.status-fini {
+  background: #c8e6c9;
+  color: #256029;
+  font-weight: 400;
+  font-size: 20px;
+  padding: 5px;
+  border: 1px solid;
+  border-radius: 1rem;
+  background-color: transparent;
+}
+
+.status-en_cours {
+  background: #feedaf;
+  color: #8a5340;
+  font-weight: 400;
+  font-size: 20px;
+  padding: 5px;
+  border: 1px solid;
+  border-radius: 1rem;
+  background-color: transparent;
+}
+
+.status-car__mission {
+  background-color: #eccfff;
+  color: #694382;
+  font-weight: 400;
+  font-size: 20px;
+  padding: 5px;
+  border: 1px solid;
+  border-radius: 1rem;
+  background-color: transparent;
+}
+
+.status-car__disponible {
+  background-color: #b3e5fc;
+  color: #23547b;
+  font-weight: 400;
+  font-size: 20px;
+  padding: 5px;
+  border: 1px solid;
+  border-radius: 1rem;
+  background-color: transparent;
+}
+
+.status-annuller {
+  background-color: #ffcdd2;
+  color: #c63737;
+  font-weight: 400;
+  font-size: 20px;
+  padding: 5px;
+  border: 1px solid;
+  border-radius: 1rem;
+  background-color: transparent;
+}
+
+.p-dialog {
+  border-radius: 1rem !important;
+}
+
+.p-dialog-title {
+  color: #c63737 !important;
 }

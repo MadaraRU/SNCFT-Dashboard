@@ -128,7 +128,7 @@ const ParcDetails = (props) => {
 
     updateParc(parcIdU, {
       reference: referenceU,
-      departement: departementU,
+      departement: departementU.charAt(0).toUpperCase() + departementU.slice(1),
       localisation: localisationU,
     });
 
@@ -226,7 +226,13 @@ const ParcDetails = (props) => {
   const submitHandler = (e) => {
     e.preventDefault(e);
 
-    dispatch(setParc({ reference, localisation, departement }));
+    dispatch(
+      setParc({
+        reference,
+        localisation,
+        departement: departement.charAt(0).toUpperCase() + departement.slice(1),
+      })
+    );
 
     if (!departement || !reference || !localisation) {
       setRefIsValid(false);

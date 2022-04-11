@@ -132,8 +132,15 @@ const CarsDetails = (props) => {
 
   const actionsTemplate = (rowData) => {
     const updateCarToUnbroken = async () => {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
       const response = axios.put(
-        `http://localhost:5000/api/voiture/${rowData._id}/unbroken`
+        `http://localhost:5000/api/voiture/${rowData._id}/unbroken`,
+        "",
+        config
       );
       if (response) {
         setIsUnbroken(!isUnbroken);
@@ -224,6 +231,10 @@ const CarsDetails = (props) => {
         {rowData.status}
       </span>
     );
+  };
+
+  const matriculeTemplate = (rowData) => {
+    return <span dir="rtl">{rowData.matricule}</span>;
   };
 
   useEffect(() => {
@@ -382,7 +393,12 @@ const CarsDetails = (props) => {
             >
               <Column field="marque" header="Marque" sortable />
               <Column field="modele" header="Modele" sortable />
-              <Column field="matricule" header="Matricule" sortable />
+              <Column
+                body={matriculeTemplate}
+                header="Matricule"
+                dir="rtl"
+                sortable
+              />
               <Column body={etatTemplate} header="Etat" />
               <Column header="Status" body={statusTemplate} />
               <Column header="Action" body={actionsTemplate} />

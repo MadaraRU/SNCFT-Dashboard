@@ -37,6 +37,7 @@ const deleteUser = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error("User not found");
   }
+  // console.log(req);
 });
 
 // @desc    Register new user
@@ -79,12 +80,13 @@ const registerUser = asyncHandler(async (req, res) => {
       isAdmin: user.isAdmin,
       role: user.role,
       departement: user.departement,
-      token: generateToken(user._id),
+      token: generateToken(user._id, user.userName),
     });
   } else {
     res.status(400);
     throw new Error("Invalid user data");
   }
+  // console.log(req);
 });
 
 // @desc    Authenticate a user
@@ -104,7 +106,7 @@ const loginUser = asyncHandler(async (req, res) => {
       isAdmin: user.isAdmin,
       role: user.role,
       departement: user.departement,
-      token: generateToken(user._id),
+      token: generateToken(user._id, user.userName),
     });
   } else {
     res.status(400);
@@ -162,7 +164,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       userName: updatedUser.userName,
       isAdmin: updatedUser.isAdmin,
       role: updatedUser.role,
-      token: generateToken(updatedUser._id),
+      token: generateToken(updatedUser._id, updatedUser.userName),
     });
   } else {
     res.status(401);
@@ -222,8 +224,8 @@ const addMission = asyncHandler(async (req, res) => {
 });
 
 // Generate JWT
-const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
+const generateToken = (id, userName) => {
+  return jwt.sign({ id, userName }, process.env.JWT_SECRET, {
     expiresIn: "360d",
   });
 };

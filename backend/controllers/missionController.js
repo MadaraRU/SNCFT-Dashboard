@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const Mission = require("../models/missionModel");
+const Archive = require("../models/archiveModel");
 
 // @desc  Get Mission
 // @route GET /api/mission
@@ -58,6 +59,15 @@ const addMission = asyncHandler(async (req, res) => {
     dateDeMission: req.body.dateDeMission,
     destination: req.body.destination,
   });
+
+  if (mission) {
+    const archive = new Archive({
+      action: "Ajouter",
+      category: "mission",
+      message: "Lancé mission",
+    });
+    await archive.save();
+  }
 
   res.status(200).json(mission);
 });
