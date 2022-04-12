@@ -39,6 +39,20 @@ const deleteUser = asyncHandler(async (req, res) => {
   }
   // console.log(req);
 });
+// @desc    DELETE user
+// @route   DELETE /api/users/:id
+// @access  Private/Admin
+const deactivateUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
+  if (user) {
+    user.isActive = false;
+    const desactivatedUser = user.save();
+    res.json(desactivatedUser);
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
 
 // @desc    Register new user
 // @route   POST /api/users
@@ -86,7 +100,7 @@ const registerUser = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("Invalid user data");
   }
-  // console.log(req);
+  console.log(req);
 });
 
 // @desc    Authenticate a user
@@ -241,4 +255,5 @@ module.exports = {
   updateUserProfile,
   addMission,
   getMission,
+  deactivateUser,
 };

@@ -330,13 +330,15 @@ const ParcDetails = (props) => {
               </div>
             </Col>
             <Col md={2}>
-              <Button
-                className="btn btn-primary my-3"
-                style={{ color: "white" }}
-                label="Ajouter un parc"
-                icon="pi pi-plus"
-                onClick={toggle}
-              />
+              <div className="d-flex justify-content-end">
+                <Button
+                  className="btn btn-primary my-3"
+                  style={{ color: "white" }}
+                  label="Ajouter un parc"
+                  icon="pi pi-plus"
+                  onClick={toggle}
+                />
+              </div>
 
               <Modal size="m" isOpen={modal} toggle={toggle}>
                 <ModalHeader>Ajouter un parc</ModalHeader>
@@ -564,7 +566,6 @@ const ParcDetails = (props) => {
             <DataTable
               value={parc}
               responsiveLayout="scroll"
-              size="large"
               className="admin-table"
               removableSort
               tableClassName="table"

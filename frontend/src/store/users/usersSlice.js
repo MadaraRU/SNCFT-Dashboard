@@ -8,6 +8,9 @@ const initialState = {
   isSuccess: false,
   isLoading: false,
   message: "",
+  isErrorDeleted: false,
+  isSuccessDeleted: false,
+  isLoadingDeleted: false,
 };
 
 // Get users
@@ -120,18 +123,22 @@ export const usersSlice = createSlice({
         state.message = action.payload;
       })
       .addCase(deleteUser.pending, (state) => {
-        state.isLoading = true;
+        state.isLoadingDeleted = true;
       })
+      // .addCase(deleteUser.fulfilled, (state, action) => {
+      //   state.isLoadingDeleted = false;
+      //   state.isSuccessDeleted = true;
+      //   state.users = state.users.filter(
+      //     (user) => user._id !== action.payload.id
+      //   );
+      // })
       .addCase(deleteUser.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isSuccess = true;
-        state.users = state.users.filter(
-          (user) => user._id !== action.payload.id
-        );
+        state.isLoadingDeleted = false;
+        state.isSuccessDeleted = true;
       })
       .addCase(deleteUser.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
+        state.isLoadingDeleted = false;
+        state.isErrorDeleted = true;
         state.message = action.payload;
       })
       .addCase(getUserProfile.pending, (state) => {

@@ -12,6 +12,7 @@ import ParcScreen from "../screens/ParcScreen/index";
 import MissionScreen from "../screens/MissionScreen/index";
 import VoitureScreen from "../screens/VoitureScreen/index";
 import FicheTechniqueScreen from "../screens/FicheTechniqueScreen/index";
+import HistoryScreen from "../screens/HistoryScreen/index";
 import { useSelector } from "react-redux";
 
 const Pages = () => {
@@ -27,6 +28,7 @@ const Pages = () => {
         path="/dashboard/ficheTechnique"
         component={FicheTechniqueScreen}
       />
+      <Route path="/dashboard/history" component={HistoryScreen} />
     </Switch>
   );
 };

@@ -100,7 +100,7 @@ const SidebarContent = ({ onClick }) => {
           <SidebarLink
             icon="history"
             title="Historique"
-            route="/dashboard/home"
+            route="/dashboard/history"
             onClick={handleHideSidebar}
           />
         </ul>

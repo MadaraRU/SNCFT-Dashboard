@@ -20,6 +20,10 @@ const missionSchema = mongoose.Schema(
       max: "2030-01-01",
       required: true,
     },
+    dateFin: {
+      type: Date,
+      default: "",
+    },
     destination: {
       type: String,
       required: true,
@@ -34,8 +38,7 @@ const missionSchema = mongoose.Schema(
       default: "",
     },
     user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      type: String,
     },
     parc: {
       type: mongoose.Schema.Types.ObjectId,

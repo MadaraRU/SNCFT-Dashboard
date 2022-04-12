@@ -30,7 +30,9 @@ const ExampleCard = () => {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const { users, isError, message } = useSelector((state) => state.users);
+  const { users, isError, message, isSuccessDeleted } = useSelector(
+    (state) => state.users
+  );
   const { user } = useSelector((state) => state.auth);
 
   const duplicationErrorToast = useRef(null);
@@ -108,7 +110,9 @@ const ExampleCard = () => {
           password,
           role,
           departement:
-            departement.charAt(0).toUpperCase() + departement.slice(1),
+            departement.trim().length === 0
+              ? "Sncft"
+              : departement.charAt(0).toUpperCase() + departement.slice(1),
         }),
       });
       const data = await response.json();
@@ -245,14 +249,22 @@ const ExampleCard = () => {
       dispatch(getUsers());
     }
 
-    if (deleted) {
-      dispatch(getUsers());
-    }
+    // if (deleted) {
+    //   dispatch(getUsers());
+    // }
 
     return () => {
       dispatch(reset());
     };
-  }, [user, history, isError, message, dispatch, fetchedData, deleted]);
+  }, [
+    user,
+    history,
+    isError,
+    message,
+    dispatch,
+    fetchedData,
+    isSuccessDeleted,
+  ]);
 
   return (
     <Col md={12}>
@@ -264,13 +276,16 @@ const ExampleCard = () => {
                 <h5 className="bold-text">Liste d'utilistateur</h5>
               </Col>
               <Col md={3}>
-                <div style={{ textAlign: "center" }}>
-                  <PButton
-                    className="btn btn-primary my-3 "
-                    label="Ajouter un utilistateur"
-                    icon="pi pi-plus"
-                    onClick={toggle}
-                  />
+                <div>
+                  <div className="d-flex justify-content-end">
+                    <PButton
+                      className="btn btn-primary my-3"
+                      label="Ajouter un utilistateur"
+                      icon="pi pi-plus"
+                      onClick={toggle}
+                    />
+                  </div>
+
                   <Modal size="m" isOpen={modal} toggle={toggle}>
                     <ModalHeader>Ajouter un utilistateur</ModalHeader>
                     <form className="form" onSubmit={onSubmit}>
@@ -414,9 +429,8 @@ const ExampleCard = () => {
             <Toast ref={duplicationErrorToast} />
             {header}
             <DataTable
-              value={users}
+              value={users.filter((user) => user.isActive === true)}
               responsiveLayout="scroll"
-              size="large"
               className="admin-table"
               removableSort
               tableClassName="table"

@@ -60,15 +60,6 @@ const addMission = asyncHandler(async (req, res) => {
     destination: req.body.destination,
   });
 
-  if (mission) {
-    const archive = new Archive({
-      action: "Ajouter",
-      category: "mission",
-      message: "Lancé mission",
-    });
-    await archive.save();
-  }
-
   res.status(200).json(mission);
 });
 

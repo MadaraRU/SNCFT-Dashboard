@@ -27,7 +27,12 @@ const userSchema = mongoose.Schema(
     },
     departement: {
       type: String,
-      required: false,
+      default: "Sncft",
+    },
+    isActive: {
+      type: Boolean,
+      required: true,
+      default: true,
     },
     mission: [
       {

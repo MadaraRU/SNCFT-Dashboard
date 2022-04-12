@@ -31,6 +31,8 @@ const historyMiddleware = async (req, res, next) => {
       ? "En panne"
       : originalUrl.includes("unbroken")
       ? "Marche"
+      : originalUrl.includes("users")
+      ? "Supprimer"
       : "Modifer",
     DELETE: "Supprimer",
   };
@@ -50,7 +52,7 @@ const historyMiddleware = async (req, res, next) => {
       : lookupTable[URL] === "parc" && body.reference !== undefined
       ? body.reference
       : lookupTable[URL] === "mission" && body.reference !== undefined
-      ? body.nom
+      ? req.body.nom
       : lookupTable[URL] === "voiture" && body.reference !== undefined
       ? body.matricule
       : ""
@@ -64,7 +66,7 @@ const historyMiddleware = async (req, res, next) => {
     action: actionsTable[reqMethode],
     category: lookupTable[URL],
     message: message,
-    createdBy: req.user?.userName,
+    createdBy: req.user?.userName ? req.user?.userName : "admin",
   });
 
   await archive.save();

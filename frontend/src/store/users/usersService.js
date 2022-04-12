@@ -15,6 +15,18 @@ const getUsers = async (token) => {
   return response.data;
 };
 
+// // Delete user
+// const deleteUser = async (userId, token) => {
+//   const config = {
+//     headers: {
+//       Authorization: `Bearer ${token}`,
+//     },
+//   };
+
+//   const response = await axios.delete(API_URL + userId, config);
+
+//   return response.data;
+// };
 // Delete user
 const deleteUser = async (userId, token) => {
   const config = {
@@ -23,7 +35,7 @@ const deleteUser = async (userId, token) => {
     },
   };
 
-  const response = await axios.delete(API_URL + userId, config);
+  const response = await axios.put(API_URL + userId, "", config);
 
   return response.data;
 };

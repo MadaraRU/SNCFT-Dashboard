@@ -11,6 +11,7 @@ const {
   updateUserProfile,
   getMission,
   addMission,
+  deactivateUser,
 } = require("../controllers/userController");
 const { protect, admin } = require("../middleware/authMiddleware");
 const { historyMiddleware } = require("../middleware/historyMiddleware");
@@ -27,6 +28,7 @@ router
 router
   .route("/:id")
   .delete(protect, admin, historyMiddleware, deleteUser)
+  .put(protect, historyMiddleware, deactivateUser)
   .get(protect, admin, getUserById);
 router.route("/:id/mission").get(protect, getMission).post(protect, addMission);
 router.get("/me", protect, getMe);

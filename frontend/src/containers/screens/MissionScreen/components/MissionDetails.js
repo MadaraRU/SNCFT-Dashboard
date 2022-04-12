@@ -232,7 +232,6 @@ const MissionDetails = () => {
       if (resp) {
         setIsCancel(resp.data);
       }
-      return resp.data;
     };
 
     const confirm = () => {
@@ -273,6 +272,8 @@ const MissionDetails = () => {
       e.preventDefault();
       if (!description) return;
       cancelMission({ description });
+      getCarIdByMatricule(rowData.matricule);
+      updateCarToAvailable(selectedCarId);
       toggleC();
       setDescription("");
       missionAnnullerToast.current.show({
@@ -388,7 +389,13 @@ const MissionDetails = () => {
 
     updateCarToUnavailable(selectedCarId);
 
-    addMissionP({ nom, nomAgent, dateDeMission, destination, matricule });
+    addMissionP({
+      nom,
+      nomAgent,
+      dateDeMission: new Date(dateDeMission),
+      destination,
+      matricule,
+    });
     addToast.current.show({
       severity: "success",
       summary: "Success",

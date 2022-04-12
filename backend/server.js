@@ -23,7 +23,7 @@ app.use("/api/mission", require("./routes/missionRoutes"));
 
 app.use("/api/voiture/", require("./routes/carRoutes"));
 
-// app.use("/api/archive", require("./routes/archiveRoutes"));
+app.use("/api/archive", require("./routes/archiveRoutes"));
 
 app.use(errorHandler);
 

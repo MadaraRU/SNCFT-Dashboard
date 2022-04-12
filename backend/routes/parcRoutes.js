@@ -24,8 +24,14 @@ router
   .put(protect, updateParc)
   .delete(protect, deleteParc)
   .get(protect, getParcById);
-router.route("/:id/cars").get(protect, getParcCars).post(protect, addParcCars);
-router.route("/:id/mission").get(protect, getMission).post(protect, addMission);
+router
+  .route("/:id/cars")
+  .get(protect, getParcCars)
+  .post(protect, historyMiddleware, addParcCars);
+router
+  .route("/:id/mission")
+  .get(protect, getMission)
+  .post(protect, historyMiddleware, addMission);
 
 // router.route("/:id/cars/:id/broken").put(protect, updateParcsCarTobroken);
 // router.get("/", getParc);

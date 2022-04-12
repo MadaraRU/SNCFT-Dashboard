@@ -49,6 +49,7 @@ const updateCarToBroken = asyncHandler(async (req, res) => {
 
   if (voiture) {
     voiture.etat = "en panne";
+    voiture.status = "disponible";
     const updatedState = await voiture.save();
     res.json(updatedState);
   } else {
