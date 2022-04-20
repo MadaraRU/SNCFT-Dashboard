@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 import ScrollToTop from "react-scroll-to-top";
 import { Col, Container, Row } from "reactstrap";
 import FicheTechniqueDetails from "./components/FicheTechniqueDetails";
@@ -10,6 +12,18 @@ const FicheTechniqueScreen = () => {
   const showCarId = (id) => {
     setCarId(id);
   };
+
+  const history = useHistory();
+  const { user } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (!user) {
+      history.replace("/");
+    }
+    if (user.role !== "responsable") {
+      history.replace("/dashboard/home");
+    }
+  }, [history, user, user.role]);
 
   return (
     <Container className="dashboard">

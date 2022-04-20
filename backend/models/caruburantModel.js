@@ -1,31 +1,36 @@
 const mongoose = require("mongoose");
 
-const carburantSchema = mongoose.Schema({
-  quantite: {
-    type: Number,
-    required: true,
+const carburantSchema = mongoose.Schema(
+  {
+    quantite: {
+      type: Number,
+      required: true,
+    },
+    type: {
+      type: String,
+      required: true,
+    },
+    nature: {
+      type: String,
+      required: true,
+    },
+    prix: {
+      type: Number,
+      required: true,
+    },
+    parc: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Parc",
+    },
   },
-  duree: {
-    type: String,
-    required: true,
-  },
-  marque: {
-    type: String,
-    required: true,
-  },
-  prix: {
-    type: Number,
-    required: true,
-  },
-  origine: {
-    type: Number,
-    required: true,
-  },
-  voiture: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Car",
-    required: true,
-  },
-});
+  {
+    timestamps: true,
+  }
+);
 
-module.exports = mongoose.Model("Carburant", carburantSchema);
+const Carburant = mongoose.model("Carburant", carburantSchema);
+
+module.exports = {
+  Carburant,
+  carburantSchema,
+};

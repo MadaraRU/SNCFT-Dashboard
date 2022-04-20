@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { carburantSchema } = require("../models/caruburantModel");
 
 const parcSchema = mongoose.Schema(
   {
@@ -24,6 +25,11 @@ const parcSchema = mongoose.Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Mission",
+      },
+    ],
+    carburant: [
+      {
+        type: carburantSchema,
       },
     ],
   },

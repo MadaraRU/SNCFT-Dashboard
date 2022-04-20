@@ -1,11 +1,10 @@
 import React, { useEffect } from "react";
 import { Col, Container, Row } from "reactstrap";
-import MissionDetails from "./components/MissionDetails";
-import ScrollToTop from "react-scroll-to-top";
-import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import { useSelector } from "react-redux";
+import CarburantDetails from "./components/CarburantDetails";
 
-const MissionScreen = () => {
+const CarburantScreen = () => {
   const history = useHistory();
   const { user } = useSelector((state) => state.auth);
 
@@ -13,24 +12,23 @@ const MissionScreen = () => {
     if (!user) {
       history.replace("/");
     }
-    if (user.role !== "responsable") {
+    if (user.role !== "responsable de carburant") {
       history.replace("/dashboard/home");
     }
   }, [history, user, user.role]);
 
   return (
     <Container className="dashboard">
-      <ScrollToTop smooth color="#1F2F61" top="100" />
       <Row>
         <Col md={12}>
-          <h3 className="page-title">Gestion Des Missions</h3>
+          <h3 className="page-title">Gestion De Carburant</h3>
         </Col>
       </Row>
       <Row>
-        <MissionDetails />
+        <CarburantDetails />
       </Row>
     </Container>
   );
 };
 
-export default MissionScreen;
+export default CarburantScreen;

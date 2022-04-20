@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ScrollToTop from "react-scroll-to-top";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -9,13 +9,17 @@ import ParcDetails from "./components/ParcDetails";
 
 const ExamplePage = (props) => {
   const [cardId, setCardId] = useState("");
+  const history = useHistory();
   const { user } = useSelector((state) => state.auth);
 
-  const history = useHistory();
-
-  if (user.role !== "admin") {
-    history.replace("/dashboard/home");
-  }
+  useEffect(() => {
+    if (!user) {
+      history.replace("/");
+    }
+    if (user.role !== "admin") {
+      history.replace("/dashboard/home");
+    }
+  }, [history, user, user.role]);
 
   const showCarId = (id) => {
     setCardId(id);

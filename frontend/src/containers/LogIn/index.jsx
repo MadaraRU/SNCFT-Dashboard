@@ -1,11 +1,18 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import FacebookIcon from "mdi-react/FacebookIcon";
-import GooglePlusIcon from "mdi-react/GooglePlusIcon";
 import LogInForm from "./components/LogInForm";
+import background from "../../shared/img/login/login-background.jpg";
+
+import "../LogIn/styles/style.css";
 
 const LogIn = () => (
-  <div className="account">
+  <div
+    className="account"
+    style={{
+      backgroundImage: `url(${background})`,
+      backgroundSize: "cover",
+      backgroundRepeat: "no-repeat",
+    }}
+  >
     <div className="account__wrapper">
       <div className="account__card">
         <div className="account__head">

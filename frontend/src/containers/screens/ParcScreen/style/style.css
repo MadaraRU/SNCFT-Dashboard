@@ -27,6 +27,13 @@
 .btn-show-car {
   cursor: pointer;
   font-size: large;
+  text-decoration: underline !important;
+}
+.btn-show-car:hover {
+  color: #1f2f61 !important;
+  cursor: pointer;
+  font-size: large;
+  text-decoration: none !important;
 }
 
 .etat-marche {
@@ -112,4 +119,8 @@ button.p-button.p-component.btn.btn-info.p-button-rounded.p-button-icon-only {
 
 .hidden {
   display: none;
+}
+
+.form__form-group-icon {
+  background-color: #f2f2f2;
 }

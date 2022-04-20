@@ -51,9 +51,9 @@ const historyMiddleware = async (req, res, next) => {
       ? body.userName
       : lookupTable[URL] === "parc" && body.reference !== undefined
       ? body.reference
-      : lookupTable[URL] === "mission" && body.reference !== undefined
-      ? req.body.nom
-      : lookupTable[URL] === "voiture" && body.reference !== undefined
+      : lookupTable[URL] === "mission" && body.nom !== undefined
+      ? body.nom
+      : lookupTable[URL] === "voiture" && body.matricule !== undefined
       ? body.matricule
       : ""
   } ${actionsTable[reqMethode]} par ${

@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const Parc = require("../models/parcModel");
 const Car = require("../models/carModel");
 const Mission = require("../models/missionModel");
+const { Carburant } = require("../models/caruburantModel");
 
 // @desc  Get Parc
 // @route GET /api/parc
@@ -171,7 +172,7 @@ const addMission = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("Please add a destination field");
   }
-  // Create a new car
+  // Create a new mission
   const newMission = new Mission(req.body);
 
   // Get parc
@@ -180,7 +181,7 @@ const addMission = asyncHandler(async (req, res) => {
   // Assing a parc as a mission parc
   newMission.parc = parc;
 
-  // save the car
+  // save the mission
   await newMission.save();
 
   // Add mission to the parc's mission array
@@ -211,6 +212,68 @@ const updateMissionToFini = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    add carburant to existed parc
+// @route   POST /api/parcs/:id/carburant
+// @access  Private
+
+const addCarburantToParc = asyncHandler(async (req, res) => {
+  if (req.body.quantite < 0) throw new Error("Quantite negative");
+
+  const quantite = +req.body.quantite;
+  const carburant = await Carburant.findById(req.body.carbId);
+
+  if (carburant.quantite - quantite < 0) throw new Error("Quantite negative");
+
+  // Create a new carburant
+  const newCarburant = new Carburant({
+    quantite: quantite,
+    type: carburant.type,
+    nature: carburant.nature,
+    prix: carburant.prix,
+  });
+
+  carburant.quantite -= quantite;
+
+  await carburant.save();
+
+  // Get parc
+  const parc = await Parc.findById(req.params.id);
+
+  let check = true;
+
+  for (let carb of parc.carburant) {
+    if (carb.type === carburant.type) {
+      carb.quantite += quantite;
+      check = false;
+      break;
+    }
+  }
+  if (check) {
+    parc.carburant.push(newCarburant);
+  }
+
+  // save the carburant
+  // await newCarburant.save();
+
+  // Add carburant to the parc's carburant array
+
+  // save the parc
+  await parc.save();
+
+  // console.log(req);
+
+  res.status(201).json(newCarburant);
+});
+
+// @desc    get carburant's parc
+// @route   GET /api/parcs/:id/carburant
+// @access  Private
+
+const getCarburantParc = asyncHandler(async (req, res) => {
+  const parc = await Parc.findById(req.params.id).populate("carburant");
+  res.status(200).json(parc.carburant);
+});
+
 module.exports = {
   getParc,
   getParcById,
@@ -223,4 +286,6 @@ module.exports = {
   addMission,
   updateMissionToFini,
   updateParcsCarTobroken,
+  addCarburantToParc,
+  getCarburantParc,
 };

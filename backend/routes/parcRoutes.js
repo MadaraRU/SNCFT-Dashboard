@@ -11,6 +11,8 @@ const {
   getMission,
   addMission,
   updateParcsCarTobroken,
+  getCarburantParc,
+  addCarburantToParc,
 } = require("../controllers/parcController");
 const { admin, protect } = require("../middleware/authMiddleware");
 const { historyMiddleware } = require("../middleware/historyMiddleware");
@@ -32,6 +34,10 @@ router
   .route("/:id/mission")
   .get(protect, getMission)
   .post(protect, historyMiddleware, addMission);
+router
+  .route("/:id/carburant")
+  .get(protect, getCarburantParc)
+  .post(addCarburantToParc);
 
 // router.route("/:id/cars/:id/broken").put(protect, updateParcsCarTobroken);
 // router.get("/", getParc);

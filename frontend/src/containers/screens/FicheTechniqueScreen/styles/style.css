@@ -1,4 +1,11 @@
 .btn-show-papers {
   cursor: pointer;
   font-size: large;
+  text-decoration: underline !important;
+}
+.btn-show-papers:hover {
+  color: #1f2f61 !important;
+  cursor: pointer;
+  font-size: large;
+  text-decoration: none !important;
 }

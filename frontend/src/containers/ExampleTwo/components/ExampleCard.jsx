@@ -241,7 +241,7 @@ const ExampleCard = () => {
     if (!user) {
       history.replace("/log_in");
     }
-    if ((user && user.isAdmin) || user.role === "admin") {
+    if (user && user.role === "admin") {
       dispatch(getUsers());
     }
 

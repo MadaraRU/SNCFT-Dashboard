@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import SidebarLink from "./SidebarLink";
 import { useSelector } from "react-redux";
-// import SidebarCategory from "./SidebarCategory";
+import SidebarCategory from "./SidebarCategory";
 
 const SidebarContent = ({ onClick }) => {
   const handleHideSidebar = () => {
@@ -37,6 +37,28 @@ const SidebarContent = ({ onClick }) => {
           onClick={handleHideSidebar}
         />
       </ul>
+      {user && user.role === "responsable de carburant" && (
+        <ul className="sidebar__block">
+          {/* <SidebarLink
+            icon="drop"
+            title="Carburant"
+            route="/dashboard/carburant"
+            onClick={handleHideSidebar}
+          /> */}
+          <SidebarCategory title="Carburant" icon="drop">
+            <SidebarLink
+              title="Ajouter Carburant"
+              route="/dashboard/carburant"
+              onClick={handleHideSidebar}
+            />
+            <SidebarLink
+              title="Affecter Carburant"
+              route="/dashboard/carburant"
+              onClick={handleHideSidebar}
+            />
+          </SidebarCategory>
+        </ul>
+      )}
       {user && user.role === "admin" && (
         <ul className="sidebar__block">
           <SidebarLink

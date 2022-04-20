@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import { Toast } from "primereact/toast";
-import { Redirect, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Layout from "../Layout/index";
 import MainWrapper from "./MainWrapper";
 
@@ -13,25 +13,28 @@ import MissionScreen from "../screens/MissionScreen/index";
 import VoitureScreen from "../screens/VoitureScreen/index";
 import FicheTechniqueScreen from "../screens/FicheTechniqueScreen/index";
 import HistoryScreen from "../screens/HistoryScreen/index";
+import CarburantScreen from "../screens/CarburantScreen/index";
+import NotFound404 from "../screens/404_Screen/NotFound404";
+
 import { useSelector } from "react-redux";
 
-const Pages = () => {
-  return (
-    <Switch>
-      <Route path="/dashboard/home" component={ExamplePageOne} />
-      <Route path="/dashboard/admin" component={ExamplePageTwo} />
-      <Route path="/dashboard/profile" component={ProfileScreen} />
-      <Route path="/dashboard/parc" component={ParcScreen} />
-      <Route path="/dashboard/mission" component={MissionScreen} />
-      <Route path="/dashboard/voiture" component={VoitureScreen} />
-      <Route
-        path="/dashboard/ficheTechnique"
-        component={FicheTechniqueScreen}
-      />
-      <Route path="/dashboard/history" component={HistoryScreen} />
-    </Switch>
-  );
-};
+// const Pages = () => {
+//   return (
+//     <Switch>
+//       <Route path="/dashboard/home" component={ExamplePageOne} />
+//       <Route path="/dashboard/admin" component={ExamplePageTwo} />
+//       <Route path="/dashboard/profile" component={ProfileScreen} />
+//       <Route path="/dashboard/parc" component={ParcScreen} />
+//       <Route path="/dashboard/mission" component={MissionScreen} />
+//       <Route path="/dashboard/voiture" component={VoitureScreen} />
+//       <Route
+//         path="/dashboard/ficheTechnique"
+//         component={FicheTechniqueScreen}
+//       />
+//       <Route path="/dashboard/history" component={HistoryScreen} />
+//     </Switch>
+//   );
+// };
 
 const wrappedRoutes = () => {
   const { user, isSuccess } = useSelector((state) => state.auth);
@@ -53,9 +56,21 @@ const wrappedRoutes = () => {
     <div>
       <Layout />
       <div className="container__wrap">
-        {/* <Route path="/dashboard/" component={Pages} /> */}
-        <Pages />
-        {/* {user && <Redirect to="/dashboard/home" />} */}
+        <Switch>
+          <Route path="/dashboard/home" component={ExamplePageOne} />
+          <Route path="/dashboard/admin" component={ExamplePageTwo} />
+          <Route path="/dashboard/profile" component={ProfileScreen} />
+          <Route path="/dashboard/parc" component={ParcScreen} />
+          <Route path="/dashboard/mission" component={MissionScreen} />
+          <Route path="/dashboard/voiture" component={VoitureScreen} />
+          <Route
+            path="/dashboard/ficheTechnique"
+            component={FicheTechniqueScreen}
+          />
+          <Route path="/dashboard/history" component={HistoryScreen} />
+          <Route path="/dashboard/carburant" component={CarburantScreen} />
+          <Route path="*" component={NotFound404} />
+        </Switch>
         <Toast ref={WelcomeToast} position="bottom-right" />
       </div>
     </div>
@@ -65,11 +80,13 @@ const wrappedRoutes = () => {
 const Router = () => (
   <MainWrapper>
     <main>
-      <Switch>
-        <Route exact path="/" component={LogIn} />
-        <Route exact path="/log_in" component={LogIn} />
-        <Route path="/" component={wrappedRoutes} />
-      </Switch>
+      <BrowserRouter>
+        <Switch>
+          <Route exact path="/" component={LogIn} />
+          <Route exact path="/log_in" component={LogIn} />
+          <Route path="/" component={wrappedRoutes} />
+        </Switch>
+      </BrowserRouter>
     </main>
   </MainWrapper>
 );

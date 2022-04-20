@@ -34,6 +34,10 @@ const FicheTechniqueDetails = (props) => {
     );
   };
 
+  const matriculeTemplate = (rowData) => {
+    return <span dir="rtl">{rowData.matricule}</span>;
+  };
+
   useEffect(() => {
     if (!user) {
       history.replace("/");
@@ -69,7 +73,7 @@ const FicheTechniqueDetails = (props) => {
             >
               <Column field="marque" header="Marque" sortable />
               <Column field="modele" header="Modele" sortable />
-              <Column field="matricule" header="Matricule" sortable />
+              <Column body={matriculeTemplate} header="Matricule" sortable />
               <Column body={showPapersTemplate} header="Papier" />
             </DataTable>
           </div>

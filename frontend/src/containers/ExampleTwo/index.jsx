@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { Col, Container, Row } from "reactstrap";
@@ -8,9 +8,14 @@ const ExamplePage = () => {
   const history = useHistory();
   const { user } = useSelector((state) => state.auth);
 
-  if (user && !user.isAdmin) {
-    history.replace("/dashboard/home");
-  }
+  useEffect(() => {
+    if (!user) {
+      history.replace("/");
+    }
+    if (user.role !== "admin") {
+      history.replace("/dashboard/home");
+    }
+  }, [history, user, user.role]);
 
   return (
     <Container className="dashboard">

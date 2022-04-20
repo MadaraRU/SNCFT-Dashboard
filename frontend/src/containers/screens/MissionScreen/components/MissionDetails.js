@@ -223,7 +223,7 @@ const MissionDetails = () => {
       return resp.data;
     };
     const cancelMission = async (reason) => {
-      if (description.trim().length === 0) return;
+      // if (description.trim().length === 0) return;
       const resp = await axios.put(
         `http://localhost:5000/api/mission/${rowData?._id}/annuller`,
         reason,
@@ -270,8 +270,10 @@ const MissionDetails = () => {
 
     const submitCancelHandler = (e) => {
       e.preventDefault();
-      if (!description) return;
-      cancelMission({ description });
+      // if (!description) return;
+      cancelMission({
+        description: !description ? "Pas de motif" : description,
+      });
       getCarIdByMatricule(rowData.matricule);
       updateCarToAvailable(selectedCarId);
       toggleC();
@@ -456,7 +458,16 @@ const MissionDetails = () => {
     return () => {
       dispatch(reset());
     };
-  }, [user, dispatch, history, dp[0]?._id, isAdded, isFini, isCancel]);
+  }, [
+    user,
+    dispatch,
+    history,
+    dp[0]?._id,
+    isAdded,
+    isFini,
+    isCancel,
+    selectedCarId,
+  ]);
 
   return (
     <>

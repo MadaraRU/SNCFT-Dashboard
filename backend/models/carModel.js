@@ -16,10 +16,6 @@ const carSchema = mongoose.Schema(
       unique: true,
       default_language: "ar",
     },
-    carburant: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Carburant",
-    },
     etat: {
       type: String,
       required: true,

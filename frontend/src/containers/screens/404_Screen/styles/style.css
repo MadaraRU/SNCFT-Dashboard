@@ -1,0 +1,22 @@
+.not-found {
+  position: relative;
+  text-align: center;
+  color: white;
+}
+
+.not-found__info {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* color: black;
+  font-weight: 400; */
+}
+
+a {
+  text-decoration: none !important;
+}
+
+a:hover {
+  color: white !important;
+}

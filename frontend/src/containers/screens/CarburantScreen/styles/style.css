@@ -1,0 +1,36 @@
+.admin-table thead {
+  color: white;
+  background-color: #1f2f61;
+  font-size: large;
+}
+.admin-table tbody {
+  border-bottom: 0.5px solid;
+  border-color: #c8d0dd;
+}
+
+.admin-table td {
+  vertical-align: middle;
+  font-size: 14px;
+}
+
+.btn-show-carburant {
+  cursor: pointer;
+  font-size: large;
+  text-decoration: underline !important;
+}
+
+.btn-show-carburant:hover {
+  color: #1f2f61 !important;
+  cursor: pointer;
+  font-size: large;
+  text-decoration: none !important;
+}
+
+ul.sidebar__submenu {
+  background-color: #172347 !important;
+}
+
+tr.p-highlight {
+  background: #f2f4f7 !important;
+  color: black !important;
+}
