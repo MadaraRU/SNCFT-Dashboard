@@ -27,6 +27,8 @@ import DateIcon from "mdi-react/CalendarMonthIcon";
 import DestinationIcon from "mdi-react/GoogleMapsIcon";
 import MatriculeIcon from "mdi-react/CarEstateIcon";
 import DescriptionIcon from "mdi-react/MessageQuestionOutlineIcon";
+import CarburantTypeIcon from "mdi-react/GasStationIcon";
+import QuantityIcon from "mdi-react/CounterIcon";
 
 import "primereact/resources/themes/bootstrap-sncft/theme5.css"; //theme
 import "primereact/resources/primereact.min.css"; //core css
@@ -60,6 +62,13 @@ const MissionDetails = () => {
   const [isCancel, setIsCancel] = useState();
   const [isAdded, setIsAdded] = useState(false);
   const [description, setDescription] = useState("");
+  const [carburantType, setCarburantType] = useState("");
+  const [quantite, setQuantite] = useState("");
+  const [carbId, setCarbId] = useState("");
+  const [isCarbQtyUpdated, setIsCarbQtyUpdated] = useState(false);
+  const [carburant, setCarburant] = useState([]);
+
+  const [isUpdatedToAvailable, setIsUpdatedToAvailable] = useState(false);
 
   const [desc, setDesc] = useState(null);
 
@@ -139,13 +148,18 @@ const MissionDetails = () => {
   };
 
   // Car changing state handler
-  const getCarIdByMatricule = async (matricule) => {
-    const response = await axios.post("/api/voiture", {
-      matricule: matricule,
-    });
-    if (response) {
-      setSelectedCarId(await response.data);
-    }
+  const getCarIdByMatricule = (matricule) => {
+    fetch("http://localhost:5000/api/voiture", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        matricule: matricule,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => setSelectedCarId(data));
   };
 
   const config = {
@@ -235,6 +249,10 @@ const MissionDetails = () => {
     };
 
     const confirm = () => {
+      getCarIdByMatricule(rowData.matricule);
+      console.log(rowData.matricule);
+      console.log(selectedCarId);
+
       confirmDialog({
         message: "Êtes-vous sûr de terminer la mission?",
         header: "Confirmation",
@@ -245,8 +263,7 @@ const MissionDetails = () => {
         rejectClassName: "btn btn-primary",
         accept: () => {
           endMission();
-          getCarIdByMatricule(rowData.matricule);
-          updateCarToAvailable(selectedCarId);
+          setIsUpdatedToAvailable(!isUpdatedToAvailable);
           missionFiniToast.current.show({
             severity: "success",
             summary: "Success",
@@ -256,6 +273,10 @@ const MissionDetails = () => {
       });
     };
     const confirmCancel = () => {
+      getCarIdByMatricule(rowData.matricule);
+      console.log(rowData.matricule);
+      console.log(selectedCarId);
+
       confirmDialog({
         message: "Êtes-vous sûr d'annuller la mission?",
         header: "Confirmation",
@@ -274,15 +295,16 @@ const MissionDetails = () => {
       cancelMission({
         description: !description ? "Pas de motif" : description,
       });
-      getCarIdByMatricule(rowData.matricule);
-      updateCarToAvailable(selectedCarId);
-      toggleC();
-      setDescription("");
+      setIsUpdatedToAvailable(!isUpdatedToAvailable);
+
       missionAnnullerToast.current.show({
         severity: "info",
         summary: "Info Message",
         detail: "Mission annuller",
       });
+      setDescription("");
+      toggleC();
+      setSelectedCarId("");
     };
 
     return (
@@ -383,10 +405,7 @@ const MissionDetails = () => {
         life: 3000,
       });
       return;
-    } else {
-      toggle();
     }
-
     // getCarIdByMatricule(matricule);
 
     updateCarToUnavailable(selectedCarId);
@@ -404,12 +423,18 @@ const MissionDetails = () => {
       detail: "Mission ajouté",
       life: 3000,
     });
+    updateCarburantParcQuantity(+quantite, carbId);
+
+    toggle();
 
     setNom("");
     setNomAgent("");
     setDateDeMission("");
     setDistination("");
     setMatricule("");
+    setCarburantType("");
+    setQuantite("");
+    setSelectedCarId("");
   };
 
   const dp = parc?.filter((p) => p?.departement === user?.departement);
@@ -429,6 +454,32 @@ const MissionDetails = () => {
       setIsAdded(!isAdded);
     }
     return response.data;
+  };
+
+  const getCarburant = async () => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+
+    const response = await axios(
+      `http://localhost:5000/api/parc/${dp[0]?._id}/carburant`,
+      config
+    );
+    const data = await response.data;
+
+    setCarburant(data);
+  };
+
+  const updateCarburantParcQuantity = async (quantite, carbId) => {
+    const response = await axios.put(
+      `http://localhost:5000/api/parc/${dp[0]?._id}/carburant`,
+      { quantite, carbId }
+    );
+    const data = await response.data;
+
+    setIsCarbQtyUpdated(!isCarbQtyUpdated);
   };
 
   useEffect(() => {
@@ -451,6 +502,14 @@ const MissionDetails = () => {
       dispatch(getAllMissions(dp[0]?._id));
     }
 
+    if (dp[0]?._id) {
+      getCarburant();
+    }
+
+    if (isCarbQtyUpdated) {
+      getCarburant();
+    }
+
     if (isSuccessCar) {
       dispatch(getAllCars(dp[0]._id));
     }
@@ -466,8 +525,14 @@ const MissionDetails = () => {
     isAdded,
     isFini,
     isCancel,
-    selectedCarId,
+    isCarbQtyUpdated,
   ]);
+
+  useEffect(() => {
+    if (isUpdatedToAvailable) {
+      updateCarToAvailable(selectedCarId);
+    }
+  }, [selectedCarId, isUpdatedToAvailable]);
 
   return (
     <>
@@ -603,6 +668,7 @@ const MissionDetails = () => {
                           defaultValue=""
                           onChange={(e) => {
                             const selectedMatricule = e.target.value;
+                            console.log(selectedMatricule);
                             setMatricule(selectedMatricule);
                             getCarIdByMatricule(selectedMatricule);
                           }}
@@ -631,6 +697,65 @@ const MissionDetails = () => {
                               );
                             })}
                         </select>
+                      </div>
+                    </div>
+
+                    <div className="form__form-group">
+                      <span className="form__form-group-label">
+                        Type De Carburant
+                      </span>
+                      <div className="form__form-group-field">
+                        <div className="form__form-group-icon">
+                          <CarburantTypeIcon />
+                        </div>
+                        <select
+                          style={{ width: "100%" }}
+                          value={carburantType}
+                          defaultValue=""
+                          onChange={(e) => {
+                            console.log(
+                              e.target.options[e.target.selectedIndex].dataset
+                                .id
+                            );
+                            setCarburantType(e.target.value);
+                            return setCarbId(
+                              e.target.options[e.target.selectedIndex].dataset
+                                .id
+                            );
+                          }}
+                        >
+                          <option value="" defaultValue="" disabled>
+                            Choisir type de carburant
+                          </option>
+                          {carburant.map((c) => {
+                            return (
+                              <option
+                                key={c._id}
+                                data-id={c._id}
+                                value={c.type}
+                              >
+                                {c.type}
+                              </option>
+                            );
+                          })}
+                        </select>
+                      </div>
+                    </div>
+                    <div className="form__form-group">
+                      <span className="form__form-group-label">Quantite</span>
+                      <div className="form__form-group-field">
+                        <div className="form__form-group-icon">
+                          <QuantityIcon />
+                        </div>
+                        <input
+                          name="quantite"
+                          className="modal-input"
+                          type="number"
+                          id="quantite"
+                          placeholder="quantite"
+                          value={quantite}
+                          onChange={(e) => setQuantite(e.target.value)}
+                        />
                       </div>
                     </div>
                   </ModalBody>
@@ -690,6 +815,23 @@ const MissionDetails = () => {
             <Col md={5}>
               <Card>
                 <CardBody>
+                  <div className="card__title">
+                    <h5 className="bold-text">Details Du Carburant: </h5>
+                  </div>
+                  <DataTable
+                    value={carburant}
+                    responsiveLayout="scroll"
+                    dataKey="_id"
+                    removableSort
+                    className="admin-table"
+                    tableClassName="table"
+                    emptyMessage="Pas de carburant disponible"
+                  >
+                    <Column field="quantite" header="Quantite" />
+                    <Column field="type" header="Type" />
+                    <Column field="nature" header="Nature" />
+                  </DataTable>
+
                   <div className="card__title">
                     <h5 className="bold-text">Details Du Parc: </h5>
                   </div>

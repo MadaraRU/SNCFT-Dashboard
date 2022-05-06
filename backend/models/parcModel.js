@@ -32,6 +32,10 @@ const parcSchema = mongoose.Schema(
         type: carburantSchema,
       },
     ],
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   {

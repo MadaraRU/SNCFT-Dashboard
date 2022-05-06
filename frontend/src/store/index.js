@@ -8,6 +8,7 @@ import missionUReducer from "./userOwnMission/missionUSlice";
 import missionPReducer from "./parcOwnMission/missionPSlice";
 import carsPReducer from "./parcOwnCars/carsPSlice";
 import papersCReducer from "./carOwnPapers/papersCSlice";
+import damagedCReducer from "./carDamagedDetails/damagedCSlice";
 import archiveReducer from "./archive/archiveSlice";
 
 const store = configureStore({
@@ -21,6 +22,7 @@ const store = configureStore({
     missionP: missionPReducer,
     carsP: carsPReducer,
     papersC: papersCReducer,
+    damagedC: damagedCReducer,
     archive: archiveReducer,
   },
 });

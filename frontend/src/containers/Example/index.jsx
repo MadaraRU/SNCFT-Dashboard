@@ -2,22 +2,21 @@ import React from "react";
 import { Col, Container, Row } from "reactstrap";
 import PieChart from "./components/PieChart";
 import ExampleCard from "./components/ExampleCard";
+import CarburantChart from "./components/CarburantChart";
 
 const DashboardScreen = () => {
   return (
-    <Container className="dashboard">
+    <Container>
       <Row>
         <Col md={12}>
           <h3 className="page-title">Sncft Dashboard</h3>
         </Col>
       </Row>
       <Row>
-        <Col md={6}>
-          <ExampleCard />
-        </Col>
-        <Col md={6}>
-          <PieChart />
-        </Col>
+        <ExampleCard />
+        <PieChart />
+        <CarburantChart />
+        <PieChart />
       </Row>
     </Container>
   );

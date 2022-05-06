@@ -13,6 +13,8 @@ const {
   updateParcsCarTobroken,
   getCarburantParc,
   addCarburantToParc,
+  updateCarburantParcQuantity,
+  desactivateParc,
 } = require("../controllers/parcController");
 const { admin, protect } = require("../middleware/authMiddleware");
 const { historyMiddleware } = require("../middleware/historyMiddleware");
@@ -23,7 +25,8 @@ router
   .post(protect, historyMiddleware, setParc);
 router
   .route("/:id")
-  .put(protect, updateParc)
+  .put(protect, historyMiddleware, updateParc)
+  .put(protect, historyMiddleware, desactivateParc)
   .delete(protect, deleteParc)
   .get(protect, getParcById);
 router
@@ -37,7 +40,8 @@ router
 router
   .route("/:id/carburant")
   .get(protect, getCarburantParc)
-  .post(addCarburantToParc);
+  .post(addCarburantToParc)
+  .put(updateCarburantParcQuantity);
 
 // router.route("/:id/cars/:id/broken").put(protect, updateParcsCarTobroken);
 // router.get("/", getParc);

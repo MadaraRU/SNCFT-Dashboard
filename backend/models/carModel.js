@@ -39,6 +39,12 @@ const carSchema = mongoose.Schema(
         ref: "CarPapers",
       },
     ],
+    damagedCarDetails: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "DamagedCarDetails",
+      },
+    ],
   },
   {
     timestamps: true,

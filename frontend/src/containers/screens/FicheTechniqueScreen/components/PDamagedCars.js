@@ -5,12 +5,12 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { getParcs } from "../../../../store/parc/parcSlice";
-import { getAllCars } from "../../../../store/parcOwnCars/carsPSlice";
+import { getParcs, reset as resetParc } from "../../../../store/parc/parcSlice";
+import { getAllCars, reset } from "../../../../store/parcOwnCars/carsPSlice";
 
 import "../styles/style.css";
 
-const FicheTechniqueDetails = (props) => {
+const PDamagedCars = (props) => {
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -20,16 +20,16 @@ const FicheTechniqueDetails = (props) => {
 
   const dp = parc?.filter((p) => p?.departement === user?.departement);
 
-  const showPapersTemplate = (rowData) => {
+  const showDamagedDetailsTemplate = (rowData) => {
     return (
       <a
         className="btn-show-papers"
         onClick={() => {
           props.onShow(rowData._id);
         }}
-        href="#paper"
+        href="#details"
       >
-        Voir papiers
+        voir details d'accident/panne
       </a>
     );
   };
@@ -48,6 +48,11 @@ const FicheTechniqueDetails = (props) => {
     if (isSuccess) {
       dispatch(getAllCars(dp[0]?._id));
     }
+
+    return () => {
+      dispatch(reset());
+      dispatch(resetParc());
+    };
   }, [user, history, dispatch, dp[0]?._id]);
 
   return (
@@ -74,7 +79,7 @@ const FicheTechniqueDetails = (props) => {
               <Column field="marque" header="Marque" sortable />
               <Column field="modele" header="Modele" sortable />
               <Column body={matriculeTemplate} header="Matricule" sortable />
-              <Column body={showPapersTemplate} header="Papier" />
+              <Column body={showDamagedDetailsTemplate} header="Details" />
             </DataTable>
           </div>
         </CardBody>
@@ -83,4 +88,4 @@ const FicheTechniqueDetails = (props) => {
   );
 };
 
-export default FicheTechniqueDetails;
+export default PDamagedCars;

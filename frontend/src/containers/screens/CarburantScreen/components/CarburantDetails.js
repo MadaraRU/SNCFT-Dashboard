@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import {
   Card,
@@ -12,6 +12,7 @@ import {
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Button } from "primereact/button";
+import { Toast } from "primereact/toast";
 import QuantityIcon from "mdi-react/CounterIcon";
 import TypeIcon from "mdi-react/GasStationIcon";
 import NatureIcon from "mdi-react/TicketPercentIcon";
@@ -36,11 +37,14 @@ const CarburantDetails = () => {
   const [nature, setNature] = useState("");
   const [prix, setPrix] = useState();
   const [isAdded, setIsAdded] = useState(false);
+  const [isCarbAdded, setIsCarbAdded] = useState(false);
 
   const dispatch = useDispatch();
 
   const { user } = useSelector((state) => state.auth);
   const { parc } = useSelector((state) => state.parc);
+
+  const AddCarburantToast = useRef(null);
 
   const getCarburant = async () => {
     const response = await fetch("http://localhost:5000/api/carburant");
@@ -79,9 +83,10 @@ const CarburantDetails = () => {
       `http://localhost:5000/api/parc/${parcId}/carburant`,
       { carbId, quantite }
     );
-    const data = await response.data;
 
-    return data;
+    if (response) {
+      setIsCarbAdded(!isCarbAdded);
+    }
   };
 
   const submitHandlerA = (e) => {
@@ -91,6 +96,12 @@ const CarburantDetails = () => {
     // todo
 
     addCarburantToParc(parcId, carb._id, +quantiteA);
+    AddCarburantToast.current.show({
+      severity: "success",
+      summary: "Success Message",
+      detail: "Carburant Ajouter ",
+    });
+
     toggleA();
   };
 
@@ -101,12 +112,17 @@ const CarburantDetails = () => {
       getCarburant();
     }
 
+    if (isCarbAdded) {
+      getCarburant();
+    }
+
     dispatch(getParcs());
-  }, [dispatch, isAdded]);
+  }, [dispatch, isAdded, isCarbAdded]);
 
   const showCarburantTemplate = (rowData) => {
     return (
       <Button
+        className="btn btn-primary"
         label="Affecter carburant"
         icon="pi pi-plus"
         onClick={() => {
@@ -135,6 +151,7 @@ const CarburantDetails = () => {
                   }}
                 />
               </div>
+              <Toast ref={AddCarburantToast} />
               <DataTable
                 value={fetchedData}
                 selectionMode="radiobutton"

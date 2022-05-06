@@ -12,6 +12,7 @@ import ParcScreen from "../screens/ParcScreen/index";
 import MissionScreen from "../screens/MissionScreen/index";
 import VoitureScreen from "../screens/VoitureScreen/index";
 import FicheTechniqueScreen from "../screens/FicheTechniqueScreen/index";
+import DamagedCarDetailsScreen from "../screens/FicheTechniqueScreen/DamagedCarDetailsScreen";
 import HistoryScreen from "../screens/HistoryScreen/index";
 import CarburantScreen from "../screens/CarburantScreen/index";
 import NotFound404 from "../screens/404_Screen/NotFound404";
@@ -64,8 +65,12 @@ const wrappedRoutes = () => {
           <Route path="/dashboard/mission" component={MissionScreen} />
           <Route path="/dashboard/voiture" component={VoitureScreen} />
           <Route
-            path="/dashboard/ficheTechnique"
+            path="/dashboard/ficheTechnique/papers"
             component={FicheTechniqueScreen}
+          />
+          <Route
+            path="/dashboard/ficheTechnique/damaged"
+            component={DamagedCarDetailsScreen}
           />
           <Route path="/dashboard/history" component={HistoryScreen} />
           <Route path="/dashboard/carburant" component={CarburantScreen} />

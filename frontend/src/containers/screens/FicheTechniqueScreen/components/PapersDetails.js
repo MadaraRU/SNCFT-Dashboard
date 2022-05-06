@@ -119,7 +119,7 @@ const PapersDetails = (props) => {
               fontSize: "1rem",
             }}
           >
-            Voiture: {carData.matricule}
+            Voiture: <span dir="rtl">{carData.matricule}</span>
           </p>
           <Modal size="m" isOpen={modal} toggle={toggle}>
             <ModalHeader>Ajouter papier</ModalHeader>

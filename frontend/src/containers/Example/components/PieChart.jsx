@@ -27,13 +27,11 @@ const PieChart = () => {
   let fini = mission?.filter((m) => m.missionStatus === "fini");
   let annuller = mission?.filter((m) => m.missionStatus === "annuller");
 
-  console.log(mission);
-
   useEffect(() => {
     getMissions();
   }, []);
 
-  let data = {
+  const data = {
     labels: ["annuller", "fini", "en cours"],
     datasets: [
       {
@@ -59,14 +57,19 @@ const PieChart = () => {
   };
 
   return (
-    <Col md={12}>
+    <Col md={12} lg={12} xl={6}>
       <Card>
         <CardBody>
           <div className="card__title">
             <h5 className="bold-text">Details des missions</h5>
           </div>
           <div>
-            <Pie data={data} />
+            <Pie
+              data={data}
+              width="250"
+              height="250"
+              options={{ maintainAspectRatio: false, responsive: true }}
+            />
           </div>
         </CardBody>
       </Card>

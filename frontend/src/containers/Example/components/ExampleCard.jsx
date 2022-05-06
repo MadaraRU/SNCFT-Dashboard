@@ -43,14 +43,19 @@ const ExampleCard = () => {
   };
 
   return (
-    <Col md={12}>
+    <Col md={12} lg={12} xl={6}>
       <Card>
         <CardBody>
           <div className="card__title">
             <h5 className="bold-text">les etats du voitures</h5>
           </div>
           <div>
-            <Doughnut data={data} />
+            <Doughnut
+              data={data}
+              width="250"
+              height="250"
+              options={{ maintainAspectRatio: false, responsive: true }}
+            />
           </div>
         </CardBody>
       </Card>

@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const Car = require("../models/carModel");
 const CarPapers = require("../models/carPapersModel");
+const DamagedCarDetails = require("../models/carDamagedDetailsModel");
 
 // @desc  Get all cars
 // @route GET /api/voiture
@@ -152,6 +153,41 @@ const addCarPapers = asyncHandler(async (req, res) => {
   res.status(201).json(carPapers);
 });
 
+// @desc    get carPapers'car
+// @route   GET /api/voiture/:id/damaged:
+// @access  Private
+
+const getCarDamageDetails = asyncHandler(async (req, res) => {
+  const car = await Car.findById(req.params.id).populate("damagedCarDetails");
+  res.status(200).json(car.damagedCarDetails);
+});
+
+// @desc    add damage details to car
+// @route   POST /api/voiture/:id/damaged:
+// @access  Private
+
+const addDamageDetails = asyncHandler(async (req, res) => {
+  // Create a new CarDamageDetails
+  const damageDetails = new DamagedCarDetails(req.body);
+
+  // Get car
+  const car = await Car.findById(req.params.id);
+
+  // Assing a car as a damageDetail's car
+  damageDetails.car = car;
+
+  // save the car
+  await damageDetails.save();
+
+  // Add damageDetails to the car's damagedDetails attribute
+  car.damagedCarDetails.push(damageDetails);
+
+  // save the parc
+  await car.save();
+
+  res.status(201).json(damageDetails);
+});
+
 module.exports = {
   getVoitures,
   getVoituresById,
@@ -163,4 +199,6 @@ module.exports = {
   getCarIdByMatricule,
   addCarPapers,
   getcarPapersCar,
+  getCarDamageDetails,
+  addDamageDetails,
 };

@@ -16,8 +16,8 @@ const missionSchema = mongoose.Schema(
     },
     dateDeMission: {
       type: Date,
-      min: "2020-01-01",
-      max: "2030-01-01",
+      min: "2022-01-01",
+      max: "2032-01-01",
       required: true,
     },
     dateFin: {
@@ -36,6 +36,12 @@ const missionSchema = mongoose.Schema(
     description: {
       type: String,
       default: "",
+    },
+    typeDeCarburant: {
+      type: String,
+    },
+    quantite: {
+      type: Number,
     },
     user: {
       type: String,

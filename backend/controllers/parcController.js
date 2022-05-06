@@ -96,6 +96,21 @@ const deleteParc = asyncHandler(async (req, res) => {
   res.status(200).json({ id: req.params.id });
 });
 
+// @desc    DELETE parc
+// @route   PUT /api/parc/:id
+// @access  Private/Admin
+const desactivateParc = asyncHandler(async (req, res) => {
+  const parc = await Parc.findById(req.params.id);
+  if (parc) {
+    parc.isDeleted = true;
+    const desactivateParc = parc.save();
+    res.json(desactivateParc);
+  } else {
+    res.status(404);
+    throw new Error("Parc not found");
+  }
+});
+
 const getParcCars = asyncHandler(async (req, res) => {
   const parc = await Parc.findById(req.params.id).populate("voiture");
   res.status(200).json(parc.voiture);
@@ -217,12 +232,18 @@ const updateMissionToFini = asyncHandler(async (req, res) => {
 // @access  Private
 
 const addCarburantToParc = asyncHandler(async (req, res) => {
-  if (req.body.quantite < 0) throw new Error("Quantite negative");
+  if (req.body.quantite < 0) {
+    res.status(400);
+    throw new Error("Quantite negative");
+  }
 
   const quantite = +req.body.quantite;
   const carburant = await Carburant.findById(req.body.carbId);
 
-  if (carburant.quantite - quantite < 0) throw new Error("Quantite negative");
+  if (carburant.quantite - quantite < 0) {
+    res.status(400);
+    throw new Error("Quantite negative");
+  }
 
   // Create a new carburant
   const newCarburant = new Carburant({
@@ -270,7 +291,29 @@ const addCarburantToParc = asyncHandler(async (req, res) => {
 // @access  Private
 
 const getCarburantParc = asyncHandler(async (req, res) => {
-  const parc = await Parc.findById(req.params.id).populate("carburant");
+  const parc = await Parc.findById(req.params.id);
+  if (!parc) {
+    res.status(404);
+    throw new Error("Parc not found");
+  }
+  res.status(200).json(parc.carburant);
+});
+
+// @desc    update carburant's parc quantity
+// @route   PUT /api/parcs/:id/carburant
+// @access  Private
+
+const updateCarburantParcQuantity = asyncHandler(async (req, res) => {
+  const parc = await Parc.findById(req.params.id);
+
+  if (parc.carburant.id(req.body.carbId).quantite < req.body.quantite) {
+    res.status(400);
+    throw new Error("Carburant negative");
+  }
+  parc.carburant.id(req.body.carbId).quantite -= req.body.quantite;
+
+  await parc.save();
+
   res.status(200).json(parc.carburant);
 });
 
@@ -288,4 +331,6 @@ module.exports = {
   updateParcsCarTobroken,
   addCarburantToParc,
   getCarburantParc,
+  updateCarburantParcQuantity,
+  desactivateParc,
 };

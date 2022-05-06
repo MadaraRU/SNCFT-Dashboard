@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Col, Container, Row } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
+import ScrollToTop from "react-scroll-to-top";
 import CarburantDetails from "./components/CarburantDetails";
 
 const CarburantScreen = () => {
@@ -19,6 +20,7 @@ const CarburantScreen = () => {
 
   return (
     <Container className="dashboard">
+      <ScrollToTop smooth color="#1F2F61" top="100" />
       <Row>
         <Col md={12}>
           <h3 className="page-title">Gestion De Carburant</h3>

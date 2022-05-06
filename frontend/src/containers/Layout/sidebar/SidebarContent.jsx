@@ -39,24 +39,12 @@ const SidebarContent = ({ onClick }) => {
       </ul>
       {user && user.role === "responsable de carburant" && (
         <ul className="sidebar__block">
-          {/* <SidebarLink
+          <SidebarLink
             icon="drop"
             title="Carburant"
             route="/dashboard/carburant"
             onClick={handleHideSidebar}
-          /> */}
-          <SidebarCategory title="Carburant" icon="drop">
-            <SidebarLink
-              title="Ajouter Carburant"
-              route="/dashboard/carburant"
-              onClick={handleHideSidebar}
-            />
-            <SidebarLink
-              title="Affecter Carburant"
-              route="/dashboard/carburant"
-              onClick={handleHideSidebar}
-            />
-          </SidebarCategory>
+          />
         </ul>
       )}
       {user && user.role === "admin" && (
@@ -97,15 +85,32 @@ const SidebarContent = ({ onClick }) => {
               onClick={handleHideSidebar}
             />
           </ul>
-          <ul className="sidebar__block">
+          {/* <ul className="sidebar__block">
             <SidebarLink
               icon="layers"
               title="Fiche Technique"
               route="/dashboard/ficheTechnique"
               onClick={handleHideSidebar}
             />
-          </ul>
+          </ul> */}
         </>
+      )}
+
+      {user && user.role === "responsable" && (
+        <ul className="sidebar__block">
+          <SidebarCategory title="Fiche technique" icon="layers">
+            <SidebarLink
+              title="Papier de voiture"
+              route="/dashboard/ficheTechnique/papers"
+              onClick={handleHideSidebar}
+            />
+            <SidebarLink
+              title="Détails des dommages"
+              route="/dashboard/ficheTechnique/damaged"
+              onClick={handleHideSidebar}
+            />
+          </SidebarCategory>
+        </ul>
       )}
 
       <ul className="sidebar__block">
