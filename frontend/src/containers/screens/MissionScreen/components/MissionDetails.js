@@ -21,6 +21,7 @@ import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
 import { confirmDialog } from "primereact/confirmdialog";
 import { Toast } from "primereact/toast";
+import { TabView, TabPanel } from "primereact/tabview";
 import NomMissionIcon from "mdi-react/HighwayIcon";
 import NomAgent from "mdi-react/HatFedoraIcon";
 import DateIcon from "mdi-react/CalendarMonthIcon";
@@ -76,8 +77,11 @@ const MissionDetails = () => {
   const toggleC = () => setModalC(!modalC);
 
   const [descriptionDialog, setDescriptionDialog] = useState(false);
+  const [historyDialog, setHistoryDialog] = useState(false);
 
   const [selectedCarId, setSelectedCarId] = useState("");
+
+  const [activeIndex, setActiveIndex] = useState(0);
 
   // Toast handler
   const validationToast = useRef(null);
@@ -362,6 +366,14 @@ const MissionDetails = () => {
     );
   };
 
+  const showHistoryDialog = () => {
+    setHistoryDialog(true);
+  };
+
+  const hideHistoryDialog = () => {
+    setHistoryDialog(false);
+  };
+
   // Description UI handler
 
   const hideDescriptionDialog = () => {
@@ -545,23 +557,26 @@ const MissionDetails = () => {
                   <h5 className="bold-text">Details Des Missions</h5>
                 </div>
               </Col>
-              <Col md={4}>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "right",
+
+              <div className="d-flex justify-content-end">
+                <Button
+                  className="btn btn-secondary mx-2 btn-history"
+                  color="secondary"
+                  label="Historique Des Missions"
+                  icon="pi pi-history"
+                  onClick={(e) => {
+                    showHistoryDialog();
                   }}
-                >
-                  <Button
-                    className="btn btn-primary"
-                    color="primary"
-                    style={{ color: "white" }}
-                    label="Ajouter une mission"
-                    icon="pi pi-plus"
-                    onClick={toggle}
-                  />
-                </div>
-              </Col>
+                />
+                <Button
+                  className="btn btn-primary"
+                  color="primary"
+                  style={{ color: "white" }}
+                  label="Ajouter une mission"
+                  icon="pi pi-plus"
+                  onClick={toggle}
+                />
+              </div>
             </Row>
 
             <Modal size="m" isOpen={modal} toggle={toggle}>
@@ -881,19 +896,39 @@ const MissionDetails = () => {
           </Row>
         </div>
       </Col>
-      <Col md={12}>
-        <Card>
-          <CardBody>
-            <div className="card__title">
-              <h5 className="bold-text">Historique Des Missions: </h5>
-            </div>
-            <p
-              style={{
-                fontSize: "1rem",
-              }}
-            >
-              Mission Fini:{" "}
-            </p>
+
+      <Dialog
+        visible={descriptionDialog}
+        style={{ width: "500px" }}
+        breakpoints={{ "960px": "75vw", "640px": "100vw" }}
+        header="Motif d'annulation: "
+        modal
+        onHide={hideDescriptionDialog}
+        className="description-dialog"
+      >
+        <p>{desc?.description}</p>
+      </Dialog>
+
+      <Dialog
+        visible={historyDialog}
+        style={{ width: "75vw" }}
+        breakpoints={{ "960px": "75vw", "640px": "100vw" }}
+        header="Historique Des Missions "
+        modal
+        maximizable
+        onHide={hideHistoryDialog}
+        className="carburant-dialog"
+      >
+        <TabView
+          className="tabview-header-icon tabview-carburant "
+          activeIndex={activeIndex}
+          onTabChange={(e) => setActiveIndex(e.index)}
+        >
+          <TabPanel
+            header="Mission Fini"
+            leftIcon="pi pi-check"
+            className="tab-fini"
+          >
             <div>
               {header1}
               <DataTable
@@ -925,64 +960,50 @@ const MissionDetails = () => {
                 <Column body={statusTemplate} header="Status" sortable />
               </DataTable>
             </div>
-            <Dialog
-              visible={descriptionDialog}
-              style={{ width: "500px" }}
-              breakpoints={{ "960px": "75vw", "640px": "100vw" }}
-              header="Motif d'annulation: "
-              modal
-              onHide={hideDescriptionDialog}
-            >
-              <p>{desc?.description}</p>
-            </Dialog>
-
-            <div className="my-5">
-              <p
-                style={{
-                  fontSize: "1rem",
-                }}
+          </TabPanel>
+          <TabPanel
+            header="Mission Annuler"
+            leftIcon="pi pi-times"
+            className="tab-annuler"
+          >
+            {header2}
+            <div>
+              <DataTable
+                value={mission?.filter((m) => m.missionStatus === "annuller")}
+                responsiveLayout="scroll"
+                dataKey="_id"
+                removableSort
+                className="admin-table"
+                tableClassName="table"
+                paginator
+                rows={5}
+                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+                emptyMessage="Aucune mission disponible"
+                globalFilter={globalFilter2}
               >
-                Mission Annuller:{" "}
-              </p>
-              {header2}
-              <div>
-                <DataTable
-                  value={mission?.filter((m) => m.missionStatus === "annuller")}
-                  responsiveLayout="scroll"
-                  dataKey="_id"
-                  removableSort
-                  className="admin-table"
-                  tableClassName="table"
-                  paginator
-                  rows={5}
-                  paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                  emptyMessage="Aucune mission disponible"
-                  globalFilter={globalFilter2}
-                >
-                  <Column field="nom" header="Nom" sortable />
-                  <Column field="nomAgent" header="Nom D'agent" sortable />
-                  <Column
-                    body={matriculeAnnullerTemplate}
-                    header="Matricule"
-                    sortable
-                  />
-                  <Column
-                    body={dateFormatter}
-                    header="Date De Mission"
-                    sortable
-                  />
-                  <Column field="destination" header="Destination" sortable />
-                  <Column body={statusTemplate} header="Status" />
-                  <Column
-                    body={showMissionCancelReasons}
-                    header="Motif d'annulation"
-                  />
-                </DataTable>
-              </div>
+                <Column field="nom" header="Nom" sortable />
+                <Column field="nomAgent" header="Nom D'agent" sortable />
+                <Column
+                  body={matriculeAnnullerTemplate}
+                  header="Matricule"
+                  sortable
+                />
+                <Column
+                  body={dateFormatter}
+                  header="Date De Mission"
+                  sortable
+                />
+                <Column field="destination" header="Destination" sortable />
+                <Column body={statusTemplate} header="Status" />
+                <Column
+                  body={showMissionCancelReasons}
+                  header="Motif d'annulation"
+                />
+              </DataTable>
             </div>
-          </CardBody>
-        </Card>
-      </Col>
+          </TabPanel>
+        </TabView>
+      </Dialog>
     </>
   );
 };

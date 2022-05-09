@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { carburantSchema } = require("../models/caruburantModel");
+const { carteCarburantSchema } = require("./carteCarburantModel");
 
 const parcSchema = mongoose.Schema(
   {
@@ -30,6 +31,11 @@ const parcSchema = mongoose.Schema(
     carburant: [
       {
         type: carburantSchema,
+      },
+    ],
+    carteCarburant: [
+      {
+        type: carteCarburantSchema,
       },
     ],
     isDeleted: {

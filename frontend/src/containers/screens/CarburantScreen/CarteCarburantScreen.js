@@ -3,9 +3,9 @@ import { Col, Container, Row } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ScrollToTop from "react-scroll-to-top";
-import CarburantDetails from "./components/CarburantDetails";
+import CarteCarburantDetails from "./components/CarteCarburantDetails";
 
-const CarburantScreen = () => {
+const CarteCarburantScreen = () => {
   const history = useHistory();
   const { user } = useSelector((state) => state.auth);
 
@@ -27,10 +27,10 @@ const CarburantScreen = () => {
         </Col>
       </Row>
       <Row>
-        <CarburantDetails />
+        <CarteCarburantDetails />
       </Row>
     </Container>
   );
 };
 
-export default CarburantScreen;
+export default CarteCarburantScreen;

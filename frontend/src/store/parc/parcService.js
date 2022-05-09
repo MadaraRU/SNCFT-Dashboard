@@ -59,6 +59,23 @@ const deleteParc = async (parcId, token) => {
   return response.data;
 };
 
+// delete parc from UI
+const desactivateParc = async (parcId, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.put(
+    `${API_URL}/${parcId}/desactivate`,
+    "",
+    config
+  );
+
+  return response.data;
+};
+
 // getParcCars
 const getCars = async (id, token) => {
   const config = {
@@ -80,6 +97,7 @@ const parcService = {
   addParc,
   updateParc,
   deleteParc,
+  desactivateParc,
 };
 
 export default parcService;

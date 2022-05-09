@@ -4,6 +4,6 @@
 
 .account__card {
   border-radius: 1rem;
-  background-color: rgba(255, 255, 255, 0.851) !important;
+  background-color: rgba(255, 255, 255, 0.5) !important;
   backdrop-filter: blur(3px);
 }

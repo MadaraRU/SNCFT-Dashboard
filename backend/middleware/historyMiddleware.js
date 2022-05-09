@@ -10,6 +10,7 @@ const historyMiddleware = async (req, res, next) => {
 
   const lookupTable = {
     "/": baseUrl.includes("parc") ? "parc" : "user",
+    "/carburant": "carburant",
     "/:id/mission": "mission",
     "/:id/cars": "voiture",
     "/:id/fini": "mission",
@@ -18,6 +19,7 @@ const historyMiddleware = async (req, res, next) => {
     // "/:id/available": "voiture",
     // "/:id/unavailable": "voiture",
     "/:id/annuller": "mission",
+    "/:id/desactivate": "parc",
     "/:id": baseUrl.includes("parc") ? "parc" : "user",
   };
 
@@ -32,6 +34,8 @@ const historyMiddleware = async (req, res, next) => {
       : originalUrl.includes("unbroken")
       ? "Marche"
       : originalUrl.includes("users")
+      ? "Supprimer"
+      : originalUrl.includes("desactivate")
       ? "Supprimer"
       : "Modifer",
     DELETE: "Supprimer",
@@ -55,12 +59,12 @@ const historyMiddleware = async (req, res, next) => {
       ? body.nom
       : lookupTable[URL] === "voiture" && body.matricule !== undefined
       ? body.matricule
+      : lookupTable[URL] === "carburant" && body.BonDeCommande !== undefined
+      ? body.BonDeCommande
       : ""
   } ${actionsTable[reqMethode]} par ${
     req.user?.userName ? req.user?.userName : "admin"
   }`;
-
-  console.log(message);
 
   const archive = await Archive.create({
     action: actionsTable[reqMethode],

@@ -27,6 +27,10 @@ app.use("/api/archive", require("./routes/archiveRoutes"));
 
 app.use("/api/carburant", require("./routes/carburantRoutes"));
 
+app.use("/api/carte", require("./routes/carteCarburantRoutes"));
+
+app.use("/api/personnel", require("./routes/personnelRoutes"));
+
 app.use(errorHandler);
 
 app.listen(port, () => console.log(`Server started on port ${port}`));

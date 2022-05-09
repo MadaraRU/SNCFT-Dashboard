@@ -9,6 +9,9 @@ const initialState = {
   isError: false,
   isAddError: false,
   isAddSuccess: false,
+  isDeleteLoading: false,
+  isDeleteError: false,
+  isDeleteSuccess: false,
   message: "",
 };
 
@@ -61,12 +64,29 @@ export const updateParc = createAsyncThunk(
   }
 );
 
+// export const removeParc = createAsyncThunk(
+//   "parc/deleteParc",
+//   async (parcId, thunkAPI) => {
+//     try {
+//       const token = thunkAPI.getState().auth.user.token;
+//       return await parcService.deleteParc(parcId, token);
+//     } catch (error) {
+//       const message =
+//         (error.response &&
+//           error.response.data &&
+//           error.response.data.message) ||
+//         error.message ||
+//         error.toString();
+//       return thunkAPI.rejectWithValue(message);
+//     }
+//   }
+// );
 export const removeParc = createAsyncThunk(
   "parc/deleteParc",
   async (parcId, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token;
-      return await parcService.deleteParc(parcId, token);
+      return await parcService.desactivateParc(parcId, token);
     } catch (error) {
       const message =
         (error.response &&
@@ -159,17 +179,29 @@ const parcSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
       })
+      // .addCase(removeParc.pending, (state) => {
+      //   state.isLoading = true;
+      // })
+      // .addCase(removeParc.fulfilled, (state, action) => {
+      //   state.isLoading = false;
+      //   state.isSuccess = true;
+      //   state.parc.filter((p) => p._id !== action.payload.id);
+      // })
+      // .addCase(removeParc.rejected, (state, action) => {
+      //   state.isLoading = false;
+      //   state.isError = true;
+      //   state.message = action.payload;
+      // })
       .addCase(removeParc.pending, (state) => {
-        state.isLoading = true;
+        state.isDeleteLoading = true;
       })
       .addCase(removeParc.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isSuccess = true;
-        state.parc.filter((p) => p._id !== action.payload.id);
+        state.isDeleteLoading = false;
+        state.isDeleteSuccess = true;
       })
       .addCase(removeParc.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
+        state.isDeleteLoading = false;
+        state.isDeleteError = true;
         state.message = action.payload;
       })
       .addCase(getAllCars.pending, (state) => {

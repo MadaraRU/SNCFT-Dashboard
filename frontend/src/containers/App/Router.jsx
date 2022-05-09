@@ -15,6 +15,7 @@ import FicheTechniqueScreen from "../screens/FicheTechniqueScreen/index";
 import DamagedCarDetailsScreen from "../screens/FicheTechniqueScreen/DamagedCarDetailsScreen";
 import HistoryScreen from "../screens/HistoryScreen/index";
 import CarburantScreen from "../screens/CarburantScreen/index";
+import CarteCarburantScreen from "../screens/CarburantScreen/CarteCarburantScreen";
 import NotFound404 from "../screens/404_Screen/NotFound404";
 
 import { useSelector } from "react-redux";
@@ -74,6 +75,7 @@ const wrappedRoutes = () => {
           />
           <Route path="/dashboard/history" component={HistoryScreen} />
           <Route path="/dashboard/carburant" component={CarburantScreen} />
+          <Route path="/dashboard/carte" component={CarteCarburantScreen} />
           <Route path="*" component={NotFound404} />
         </Switch>
         <Toast ref={WelcomeToast} position="bottom-right" />

@@ -11,9 +11,9 @@ const setCarburant = asynchandler(async (req, res) => {
   const carburant = await Carburant.create({
     quantite: req.body.quantite,
     type: req.body.type,
+    bonDeCommande: req.body.bonDeCommande,
     nature: req.body.nature,
     prix: req.body.prix,
-    fournisseur: req.body.fournisseur,
   });
 
   const savedCarburant = await carburant.save();

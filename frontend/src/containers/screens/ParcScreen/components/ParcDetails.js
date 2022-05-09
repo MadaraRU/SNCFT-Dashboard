@@ -41,7 +41,8 @@ const ParcDetails = (props) => {
     isAddError,
     isAddSuccess,
     message: errorMessage,
-
+    isDeleteError,
+    isDeleteSuccess,
     isLoading,
   } = useSelector((state) => state.parc);
 
@@ -192,7 +193,7 @@ const ParcDetails = (props) => {
         rejectLabel: "non",
         accept: () => {
           dispatch(removeParc(rowData._id));
-          setIsDeleted(!isDeleted);
+          // setIsDeleted(!isDeleted);
           deleteToast.current.show({
             severity: "success",
             summary: "Success",
@@ -202,7 +203,7 @@ const ParcDetails = (props) => {
         },
       });
     };
-    setIsDeleted(false);
+    // setIsDeleted(false);
 
     return (
       <>
@@ -306,9 +307,9 @@ const ParcDetails = (props) => {
       });
     }
 
-    if (isDeleted) {
-      dispatch(getParcs());
-    }
+    // if (isDeleted) {
+    //   dispatch(getParcs());
+    // }
 
     if (updated) {
       dispatch(getParcs());
@@ -317,7 +318,15 @@ const ParcDetails = (props) => {
     return () => {
       dispatch(reset());
     };
-  }, [dispatch, user, history, isDeleted, updated, isAddError, isAddSuccess]);
+  }, [
+    dispatch,
+    user,
+    history,
+    updated,
+    isAddError,
+    isAddSuccess,
+    isDeleteSuccess,
+  ]);
 
   return (
     <Col md={12}>
@@ -564,7 +573,7 @@ const ParcDetails = (props) => {
             <Toast ref={validationToast} />
             {header}
             <DataTable
-              value={parc}
+              value={parc?.filter((p) => p.isDeleted === false)}
               responsiveLayout="scroll"
               className="admin-table"
               removableSort

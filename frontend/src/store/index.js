@@ -10,6 +10,7 @@ import carsPReducer from "./parcOwnCars/carsPSlice";
 import papersCReducer from "./carOwnPapers/papersCSlice";
 import damagedCReducer from "./carDamagedDetails/damagedCSlice";
 import archiveReducer from "./archive/archiveSlice";
+import personnelReducer from "./personnel/personnelSlice";
 
 const store = configureStore({
   reducer: {
@@ -24,6 +25,7 @@ const store = configureStore({
     papersC: papersCReducer,
     damagedC: damagedCReducer,
     archive: archiveReducer,
+    personnel: personnelReducer,
   },
 });
 

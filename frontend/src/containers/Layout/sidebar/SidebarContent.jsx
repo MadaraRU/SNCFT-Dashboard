@@ -38,14 +38,24 @@ const SidebarContent = ({ onClick }) => {
         />
       </ul>
       {user && user.role === "responsable de carburant" && (
-        <ul className="sidebar__block">
-          <SidebarLink
-            icon="drop"
-            title="Carburant"
-            route="/dashboard/carburant"
-            onClick={handleHideSidebar}
-          />
-        </ul>
+        <>
+          <ul className="sidebar__block">
+            <SidebarLink
+              icon="drop"
+              title="Carburant"
+              route="/dashboard/carburant"
+              onClick={handleHideSidebar}
+            />
+          </ul>
+          <ul className="sidebar__block">
+            <SidebarLink
+              icon="license"
+              title="Carte Carburant"
+              route="/dashboard/carte"
+              onClick={handleHideSidebar}
+            />
+          </ul>
+        </>
       )}
       {user && user.role === "admin" && (
         <ul className="sidebar__block">

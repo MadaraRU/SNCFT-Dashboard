@@ -249,6 +249,7 @@ const addCarburantToParc = asyncHandler(async (req, res) => {
   const newCarburant = new Carburant({
     quantite: quantite,
     type: carburant.type,
+    bonDeCommande: carburant.bonDeCommande,
     nature: carburant.nature,
     prix: carburant.prix,
   });
@@ -276,10 +277,10 @@ const addCarburantToParc = asyncHandler(async (req, res) => {
   // save the carburant
   // await newCarburant.save();
 
-  // Add carburant to the parc's carburant array
-
   // save the parc
   await parc.save();
+
+  // await Carburant.findOneAndDelete({ quantite: 0 });
 
   // console.log(req);
 

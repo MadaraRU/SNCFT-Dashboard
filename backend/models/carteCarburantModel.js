@@ -1,18 +1,11 @@
 const mongoose = require("mongoose");
 
-const carburantSchema = mongoose.Schema(
+const carteCarburantSchema = mongoose.Schema(
   {
     quantite: {
       type: Number,
       required: true,
-    },
-    type: {
-      type: String,
-      required: true,
-    },
-    nature: {
-      type: String,
-      required: true,
+      default: 0,
     },
     prix: {
       type: Number,
@@ -20,11 +13,13 @@ const carburantSchema = mongoose.Schema(
     },
     bonDeCommande: {
       type: String,
+      required: true,
     },
-    parc: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Parc",
+    dateDeRecharge: {
+      type: String,
+      default: "Pas encore recharger",
     },
+
     personnel: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Personnel",
@@ -35,9 +30,9 @@ const carburantSchema = mongoose.Schema(
   }
 );
 
-const Carburant = mongoose.model("Carburant", carburantSchema);
+const CarteCarburant = mongoose.model("CarteCarburant", carteCarburantSchema);
 
 module.exports = {
-  Carburant,
-  carburantSchema,
+  CarteCarburant,
+  carteCarburantSchema,
 };

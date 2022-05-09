@@ -34,3 +34,13 @@ tr.p-highlight {
   background: #f2f4f7 !important;
   color: black !important;
 }
+
+.carburant-dialog > .p-dialog-header > .p-dialog-title {
+  color: #646777;
+}
+
+.p-tabview .p-tabview-nav li .p-tabview-nav-link:not(.p-disabled):focus {
+  outline: 0 none;
+  outline-offset: 0;
+  box-shadow: inset 0 0 0 0.2rem rgb(31 47 97 / 50%);
+}

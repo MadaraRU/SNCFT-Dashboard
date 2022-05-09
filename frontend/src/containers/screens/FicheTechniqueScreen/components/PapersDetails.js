@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import {
   Card,
@@ -23,19 +23,24 @@ import {
   getAllPapers,
   reset,
 } from "../../../../store/carOwnPapers/papersCSlice";
+import { Toast } from "primereact/toast";
+import axios from "axios";
 
 const PapersDetails = (props) => {
   const [carData, setCarData] = useState([]);
   const [assurance, setAssurance] = useState("");
   const [visite, setVisite] = useState("");
   const [vigniette, setVigiette] = useState("");
-  const [prixAssurance, setPrixAssurance] = "";
+  const [prixAssurance, setPrixAssurance] = useState("");
+  const [isAdded, setIsAdded] = useState(false);
 
   const history = useHistory();
   const dispatch = useDispatch();
 
   const { user } = useSelector((state) => state.auth);
   const { papers } = useSelector((state) => state.papersC);
+
+  const validationToast = useRef(null);
 
   // modal handler
   const [modal, setModal] = useState(false);
@@ -72,6 +77,44 @@ const PapersDetails = (props) => {
     setCarData(data);
   };
 
+  const addPapers = async (papers) => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+
+    const response = await axios.post(
+      `http://localhost:5000/api/voiture/${props.carsId}/papers`,
+      papers,
+      config
+    );
+
+    if (response) {
+      setIsAdded(!isAdded);
+    }
+  };
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    if (!vigniette || !assurance || !prixAssurance || !visite) {
+      validationToast.current.show({
+        severity: "warn",
+        summary: "Warn Message",
+        detail: "veuillez remplir le formulaire.",
+        life: 3000,
+      });
+      return;
+    }
+
+    addPapers({ vigniette, assurance, prixAssurance: +prixAssurance, visite });
+    toggle();
+    setAssurance("");
+    setVigiette("");
+    setVisite("");
+    setPrixAssurance("");
+  };
+
   useEffect(() => {
     if (!user) {
       history.replace("/");
@@ -82,10 +125,14 @@ const PapersDetails = (props) => {
       getCarById(props.carsId);
     }
 
+    if (isAdded) {
+      dispatch(getAllPapers(props.carsId));
+    }
+
     return () => {
       dispatch(reset());
     };
-  }, [history, user, dispatch, props.carsId]);
+  }, [history, user, dispatch, props.carsId, isAdded]);
 
   return (
     <Col md={12}>
@@ -221,6 +268,7 @@ const PapersDetails = (props) => {
             </form>
           </Modal>
           <div>
+            <Toast ref={validationToast} />
             <DataTable
               value={papers}
               responsiveLayout="scroll"

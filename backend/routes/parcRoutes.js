@@ -26,9 +26,12 @@ router
 router
   .route("/:id")
   .put(protect, historyMiddleware, updateParc)
-  .put(protect, historyMiddleware, desactivateParc)
+
   .delete(protect, deleteParc)
   .get(protect, getParcById);
+router
+  .route("/:id/desactivate")
+  .put(protect, historyMiddleware, desactivateParc);
 router
   .route("/:id/cars")
   .get(protect, getParcCars)
